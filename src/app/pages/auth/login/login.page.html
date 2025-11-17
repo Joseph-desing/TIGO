@@ -1,0 +1,36 @@
+<ion-content class="ion-padding login-container">
+
+  <div class="logo">
+    <img src="assets/logo.png" alt="Tigo Conecta">
+  </div>
+
+  <h1 class="titulo">Iniciar Sesión</h1>
+
+  <ion-item class="input-item">
+    <ion-icon name="mail" slot="start"></ion-icon>
+    <ion-input 
+      type="email" 
+      [(ngModel)]="email"
+      placeholder="Correo electrónico">
+    </ion-input>
+  </ion-item>
+
+  <ion-item class="input-item">
+    <ion-icon name="lock-closed" slot="start"></ion-icon>
+    <ion-input 
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Contraseña">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" shape="round" (click)="iniciarSesion()">
+    Entrar
+  </ion-button>
+
+  <div class="registro-link">
+    ¿No tienes cuenta?
+    <span (click)="router.navigate(['/register'])">Regístrate aquí</span>
+  </div>
+
+</ion-content>

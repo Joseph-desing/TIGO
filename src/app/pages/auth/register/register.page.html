@@ -1,0 +1,44 @@
+<ion-content class="ion-padding register-container">
+
+  <div class="logo">
+    <img src="assets/logo.png" alt="Tigo Conecta">
+  </div>
+
+  <h1 class="titulo">Crear Cuenta</h1>
+
+  <ion-item class="input-item">
+    <ion-icon name="person" slot="start"></ion-icon>
+    <ion-input 
+      [(ngModel)]="nombre" 
+      placeholder="Nombre completo">
+    </ion-input>
+  </ion-item>
+
+  <ion-item class="input-item">
+    <ion-icon name="mail" slot="start"></ion-icon>
+    <ion-input 
+      type="email"
+      [(ngModel)]="email"
+      placeholder="Correo electrónico">
+    </ion-input>
+  </ion-item>
+
+  <ion-item class="input-item">
+    <ion-icon name="lock-closed" slot="start"></ion-icon>
+    <ion-input 
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Contraseña">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" shape="round" (click)="registrarse()">
+    Registrarse
+  </ion-button>
+
+  <div class="registro-link">
+    ¿Ya tienes cuenta?
+    <span (click)="router.navigate(['/login'])">Inicia sesión</span>
+  </div>
+
+</ion-content>

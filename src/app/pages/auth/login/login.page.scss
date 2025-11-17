@@ -1,0 +1,43 @@
+.login-container {
+  --background: #ffffff;
+}
+
+.logo {
+  text-align: center;
+  margin-top: 40px;
+
+  img {
+    width: 160px;
+  }
+}
+
+.titulo {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #002F6C;
+  margin-top: 20px;
+}
+
+.input-item {
+  border-radius: 14px;
+  margin-top: 20px;
+  --background: #f1f3f8;
+}
+
+ion-button {
+  margin-top: 30px;
+  --background: #002F6C;
+}
+
+.registro-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+
+  span {
+    color: #00AEEF;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+}
