@@ -1,0 +1,7 @@
+{
+  "name": "TIGO",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
