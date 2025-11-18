@@ -1,107 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Planes Disponibles</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  
-  <!-- Searchbar para filtrar -->
-  <ion-toolbar>
-    <ion-searchbar 
-      [(ngModel)]="searchTerm"
-      (ionInput)="filtrarPlanes()"
-      placeholder="Buscar planes..."
-      animated
-    ></ion-searchbar>
-  </ion-toolbar>
-  
-  <!-- Segmento para filtrar por tipo -->
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="segmentoSeleccionado" (ionChange)="filtrarPlanes()">
-      <ion-segment-button value="todos">
-        <ion-label>Todos</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="basico">
-        <ion-label>Básico</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="medio">
-        <ion-label>Medio</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="premium">
-        <ion-label>Premium</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Usuario Registrado</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="catalogo-content">
-  <!-- Loading -->
-  <div *ngIf="isLoading" class="loading-container">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando planes...</p>
-  </div>
+<ion-content class="ion-padding">
 
-  <!-- Lista de planes -->
-  <div *ngIf="!isLoading" class="planes-grid">
-    <ion-card 
-      *ngFor="let plan of planesFiltrados" 
-      class="plan-card fade-in"
-      (click)="verDetallePlan(plan)"
-    >
-      <!-- Imagen del plan -->
-      <div class="plan-image-container">
-        <img 
-          [src]="plan.imagen_url || 'assets/plan-default.png'" 
-          [alt]="plan.nombre_comercial"
-          class="plan-image"
-        />
-        <ion-badge [class]="'badge-' + plan.segmento" class="plan-badge">
-          {{ plan.segmento | titlecase }}
-        </ion-badge>
-      </div>
+  <ion-searchbar placeholder="Buscar planes"></ion-searchbar>
 
+  <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+
+  <div *ngIf="!loading">
+
+    <ion-card *ngFor="let plan of planes" class="plan-card">
       <ion-card-header>
-        <ion-card-title>{{ plan.nombre_comercial }}</ion-card-title>
-        <ion-card-subtitle>
-          <span class="precio">${{ plan.precio }}</span>
-          <span class="periodo">/mes</span>
-        </ion-card-subtitle>
+        <ion-card-title>{{ plan.nombre }}</ion-card-title>
+        <h2 class="precio">\${{ plan.precio }}</h2>
       </ion-card-header>
 
       <ion-card-content>
-        <div class="caracteristicas">
-          <div class="caracteristica">
-            <ion-icon name="cellular-outline"></ion-icon>
-            <span>{{ plan.datos_moviles }}</span>
-          </div>
-          <div class="caracteristica">
-            <ion-icon name="call-outline"></ion-icon>
-            <span>{{ plan.minutos_voz }}</span>
-          </div>
-          <div class="caracteristica">
-            <ion-icon name="chatbubble-outline"></ion-icon>
-            <span>{{ plan.sms }}</span>
-          </div>
-        </div>
+        <p>{{ plan.descripcion }}</p>
 
-        <ion-button 
-          expand="block" 
-          shape="round"
-          (click)="contratarPlan(plan); $event.stopPropagation()"
-        >
-          Contratar Ahora
+        <ion-button expand="block"
+                    (click)="verDetalle(plan.id)">
+          Ver Detalles
         </ion-button>
       </ion-card-content>
     </ion-card>
+
   </div>
 
-  <!-- Empty state -->
-  <div *ngIf="!isLoading && planesFiltrados.length === 0" class="empty-state">
-    <ion-icon name="search-outline"></ion-icon>
-    <h3>No se encontraron planes</h3>
-    <p>Intenta con otros filtros</p>
-  </div>
 </ion-content>

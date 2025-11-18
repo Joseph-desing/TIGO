@@ -32,9 +32,6 @@ export class LoginPage implements OnInit {
     this.initForm();
   }
 
-  /**
-   * Inicializar formulario
-   */
   initForm() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -42,16 +39,11 @@ export class LoginPage implements OnInit {
     });
   }
 
-  /**
-   * Toggle mostrar/ocultar contraseña
-   */
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  /**
-   * Login como usuario
-   */
+  /** Login Usuario */
   async loginAsUser() {
     if (this.loginForm.invalid) return;
     this.loadingUser = true;
@@ -60,34 +52,28 @@ export class LoginPage implements OnInit {
       const { email, password } = this.loginForm.value;
       const user = await this.authService.login({ email, password });
 
+      // guarda rol por si usas guards/UI
+      localStorage.setItem('rol', user.rol);
+
+      // 👇 ajusta 'usuario_registrado' si en tu BD usas otro string
+      if (user.rol !== 'usuario_registrado') {
+        await this.showToast('Tu cuenta no es de usuario. Usa el botón de asesor.', 'warning');
+        return;
+      }
+
       await this.showToast(`¡Bienvenido ${user.nombre || 'de nuevo'}!`, 'success');
 
-      // Redirigir según rol del usuario
-      if (user.rol === 'asesor_comercial') {
-        this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
-      } else {
-        this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
-      }
+      // 👉 USUARIO → DASHBOARD USUARIO
+      this.router.navigate(['/pages/dashboard-usuario'], { replaceUrl: true });
 
     } catch (error: any) {
-      console.error('Login error:', error);
-
-      let message = 'Error al iniciar sesión';
-      if (error.message.includes('Invalid login credentials')) {
-        message = 'Correo o contraseña incorrectos';
-      } else if (error.message.includes('Email not confirmed')) {
-        message = 'Por favor confirma tu correo electrónico';
-      }
-
-      await this.showToast(message, 'danger');
+      await this.showToast('Correo o contraseña incorrectos', 'danger');
     } finally {
       this.loadingUser = false;
     }
   }
 
-  /**
-   * Login como asesor (siempre al dashboard de asesor)
-   */
+  /** Login Asesor */
   async loginAsAdvisor() {
     if (this.loginForm.invalid) return;
     this.loadingAdvisor = true;
@@ -96,52 +82,32 @@ export class LoginPage implements OnInit {
       const { email, password } = this.loginForm.value;
       const user = await this.authService.login({ email, password });
 
+      localStorage.setItem('rol', user.rol);
+
+      // 👇 ajusta 'asesor_comercial' si en tu BD usas otro string
+      if (user.rol !== 'asesor_comercial') {
+        await this.showToast('Tu cuenta no es de asesor. Usa el botón de usuario.', 'warning');
+        return;
+      }
+
       await this.showToast(`¡Bienvenido ${user.nombre || 'de nuevo'}!`, 'success');
 
-      // REDIRECCIÓN FIJA AL DASHBOARD DE ASESOR
+      // 👉 ASESOR → DASHBOARD ASESOR
       this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
 
     } catch (error: any) {
-      console.error('Login error:', error);
-
-      let message = 'Error al iniciar sesión';
-      if (error.message.includes('Invalid login credentials')) {
-        message = 'Correo o contraseña incorrectos';
-      } else if (error.message.includes('Email not confirmed')) {
-        message = 'Por favor confirma tu correo electrónico';
-      }
-
-      await this.showToast(message, 'danger');
+      await this.showToast('Correo o contraseña incorrectos', 'danger');
     } finally {
       this.loadingAdvisor = false;
     }
   }
 
-  /**
-   * Ir a página de registro
-   */
+  /** Ir a registro */
   goToRegister() {
     this.router.navigate(['/pages/auth/register']);
   }
 
-  /**
-   * Continuar como invitado
-   */
-  async continueAsGuest() {
-    const alert = await this.alertController.create({
-      header: 'Modo Invitado',
-      message: 'Como invitado solo podrás ver el catálogo de planes. Para contratar planes necesitas crear una cuenta.',
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        { text: 'Continuar', handler: () => this.router.navigate(['/tabs/tab1'], { replaceUrl: true }) }
-      ]
-    });
-    await alert.present();
-  }
-
-  /**
-   * Recuperar contraseña
-   */
+  /** Recuperar contraseña */
   async onForgotPassword() {
     const alert = await this.alertController.create({
       header: 'Recuperar Contraseña',
@@ -152,12 +118,15 @@ export class LoginPage implements OnInit {
         {
           text: 'Enviar',
           handler: async (data) => {
-            if (!data.email) { this.showToast('Ingresa un correo electrónico', 'warning'); return false; }
+            if (!data.email) {
+              this.showToast('Ingresa un correo electrónico', 'warning');
+              return false;
+            }
             try {
               await this.authService.resetPassword(data.email);
               this.showToast('Revisa tu correo para restablecer tu contraseña', 'success');
               return true;
-            } catch (error) {
+            } catch {
               this.showToast('Error al enviar el correo', 'danger');
               return false;
             }
@@ -168,9 +137,7 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  /**
-   * Mostrar toast
-   */
+  /** Mostrar toast */
   async showToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,

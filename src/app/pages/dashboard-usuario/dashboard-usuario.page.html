@@ -1,42 +1,42 @@
-<ion-content class="ion-padding dashboard-asesor">
+<ion-content class="ion-padding dashboard-usuario">
 
   <ion-header collapse="condense" class="custom-header">
     <ion-toolbar>
-      <ion-title>Panel del Asesor</ion-title>
+      <ion-title>Panel de Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="welcome">
-    <h1>Hola, Asesor Tigo 👋</h1>
-    <p>Gestiona tus planes y contrataciones</p>
+    <h1>Hola, usuario Tigo 👋</h1>
+    <p>Elige qué deseas hacer</p>
   </div>
 
   <div class="cards">
 
-    <ion-card button="true" (click)="verCatalogoPlanes()">
+    <ion-card button="true" (click)="verCatalogo()">
       <ion-card-header>
-        <ion-card-title>Catálogo de planes</ion-card-title>
+        <ion-card-title>Ver catálogo de planes</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        Revisa los planes disponibles y su información comercial.
+        Explora todos los planes disponibles y sus beneficios.
       </ion-card-content>
     </ion-card>
 
-    <ion-card button="true" (click)="verContrataciones()">
+    <ion-card button="true" (click)="verMisContrataciones()">
       <ion-card-header>
-        <ion-card-title>Contrataciones</ion-card-title>
+        <ion-card-title>Mis contrataciones</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        Consulta las contrataciones de los clientes y accede al chat.
+        Revisa el estado de tus contrataciones y accede al chat.
       </ion-card-content>
     </ion-card>
 
-    <ion-card button="true" (click)="verPerfilAsesor()">
+    <ion-card button="true" (click)="verPerfil()">
       <ion-card-header>
         <ion-card-title>Mi perfil</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        Revisa y actualiza tus datos como asesor comercial.
+        Consulta y actualiza tu información personal.
       </ion-card-content>
     </ion-card>
 

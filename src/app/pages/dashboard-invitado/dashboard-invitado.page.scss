@@ -1,0 +1,145 @@
+.invitado-page {
+  --background: #f5f7fb;
+}
+
+.banner-sesion {
+  background: #e7f0ff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #003c9e;
+    font-weight: 500;
+  }
+
+  ion-button {
+    --border-radius: 999px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    font-size: 0.8rem;
+  }
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #0052d9, #338fff);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  color: #fff;
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+}
+
+.search-bar {
+  --background: #ffffff;
+  --border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.planes-header {
+  margin: 4px 0 8px;
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.planes-list {
+  ion-card.plan-card {
+    border-radius: 18px;
+    padding: 2px;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    ion-card-header {
+      padding-bottom: 4px;
+    }
+
+    ion-card-title {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .precio {
+      text-align: right;
+      .monto {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ffffff;
+      }
+    }
+
+    ion-card-content {
+      background: #ffffff;
+      border-radius: 14px;
+      margin-top: 8px;
+      padding-top: 10px;
+    }
+
+    .etiqueta {
+      font-size: 0.8rem;
+      color: #ff9900;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .descripcion {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .detalles {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+
+      .detalle-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.8rem;
+        color: #444;
+      }
+    }
+
+    ion-button {
+      --border-radius: 999px;
+      --background: #0052d9;
+      --color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Gradientes para las tarjetas */
+.gradient-1 {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+
+.gradient-2 {
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+}
+
+.gradient-3 {
+  background: linear-gradient(135deg, #36d1dc, #5b86e5);
+}

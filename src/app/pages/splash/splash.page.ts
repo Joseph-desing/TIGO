@@ -2,51 +2,41 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-splash',
   templateUrl: './splash.page.html',
   styleUrls: ['./splash.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule],
 })
 export class SplashPage implements OnInit {
 
   showButtons = false;
 
   constructor(
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   async ngOnInit() {
+    // Espera 2 segundos para mostrar el splash
     await this.delay(2000);
-    this.checkUser();
-  }
-
-  checkUser() {
-    const user = this.authService.getCurrentUser();
-
-    if (user) {
-      if (user.rol === 'asesor_comercial') {
-        this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
-      } else {
-        this.router.navigate(['/tabs'], { replaceUrl: true });
-      }
-    } else {
-      this.showButtons = true;
-    }
+    this.showButtons = true;
   }
 
   explorarInvitado() {
-    this.router.navigate(['/tabs'], { replaceUrl: true });
-  }
+  console.log('Click en Explorar como invitado');
+  localStorage.setItem('rol', 'invitado');
+  this.router.navigate(['/pages/dashboard-invitado'], { replaceUrl: true });
+}
 
+
+  /** 👉 IR A LOGIN */
   goLogin() {
     this.router.navigate(['/pages/auth/login'], { replaceUrl: true });
   }
 
+  /** 👉 IR A REGISTRO */
   goRegister() {
     this.router.navigate(['/pages/auth/register'], { replaceUrl: true });
   }

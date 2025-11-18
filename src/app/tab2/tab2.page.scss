@@ -1,0 +1,11 @@
+ion-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
+
+  ion-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

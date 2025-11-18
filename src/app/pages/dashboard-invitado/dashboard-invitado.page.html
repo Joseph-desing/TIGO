@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Tigo Conecta</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-chip color="light">
+        <ion-label>Invitado</ion-label>
+      </ion-chip>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding invitado-page">
+
+  <!-- Banner superior: ¿Quieres contratar un plan? Inicia sesión -->
+  <div class="banner-sesion">
+    <div class="banner-text">
+      <p>¿Quieres contratar un plan?</p>
+    </div>
+    <ion-button size="small" fill="solid" (click)="irLogin()">
+      Inicia sesión
+    </ion-button>
+  </div>
+
+  <!-- Tarjeta grande "Nuevos Planes Tigo" -->
+  <div class="hero-card">
+    <h2>Nuevos Planes Tigo</h2>
+    <p>Los mejores planes del mercado</p>
+  </div>
+
+  <!-- Buscador -->
+  <ion-searchbar
+    placeholder="Buscar planes"
+    class="search-bar">
+  </ion-searchbar>
+
+  <!-- Título lista -->
+  <div class="planes-header">
+    <h3>Planes disponibles</h3>
+  </div>
+
+  <!-- Lista de planes -->
+  <div class="planes-list">
+    <ion-card
+      *ngFor="let plan of planes"
+      class="plan-card gradient-{{ plan.colorIndex }}">
+
+      <ion-card-header>
+        <ion-card-title>{{ plan.nombre }}</ion-card-title>
+        <div class="precio">
+          <span class="monto">\${{ plan.precio | number:'1.2-2' }}</span>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="etiqueta" *ngIf="plan.etiqueta">{{ plan.etiqueta }}</p>
+        <p class="descripcion">{{ plan.descripcion }}</p>
+
+        <div class="detalles">
+          <div class="detalle-item" *ngIf="plan.gb">
+            <ion-icon name="cellular-outline"></ion-icon>
+            <span>{{ plan.gb }} GB</span>
+          </div>
+          <div class="detalle-item" *ngIf="plan.minutos">
+            <ion-icon name="call-outline"></ion-icon>
+            <span>{{ plan.minutos }} min</span>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          size="small"
+          shape="round"
+          fill="solid"
+          color="light"
+          (click)="verDetalle(plan)">
+          Ver detalles
+        </ion-button>
+      </ion-card-content>
+
+    </ion-card>
+  </div>
+
+  <div class="footer">
+    <ion-button fill="clear" (click)="volverSplash()">
+      Volver al inicio
+    </ion-button>
+  </div>
+
+</ion-content>
