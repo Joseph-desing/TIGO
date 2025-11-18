@@ -17,42 +17,33 @@ export class SupabaseService {
         auth: {
           persistSession: true,
           detectSessionInUrl: false,
-          // 👇 Clave para que NO use Navigator LockManager en Android/WebView
-          // @ts-ignore - la versión de tipos aún no incluye multiTab
+          
           multiTab: false,
         }
-      } as any  // truco para que TypeScript no se queje de multiTab
+      } as any  
     );
   }
 
-  /**
-   * Obtener la instancia del cliente de Supabase
-   */
+  
   getClient(): SupabaseClient {
     return this.supabase;
   }
 
-  /**
-   * Obtener el usuario autenticado actual
-   */
+  
   async getCurrentUser() {
     const { data: { user }, error } = await this.supabase.auth.getUser();
     if (error) throw error;
     return user;
   }
 
-  /**
-   * Obtener la sesión actual
-   */
+  
   async getSession() {
     const { data: { session }, error } = await this.supabase.auth.getSession();
     if (error) throw error;
     return session;
   }
 
-  /**
-   * Subir archivo a Supabase Storage
-   */
+  
   async uploadFile(bucket: string, path: string, file: File) {
     const { data, error } = await this.supabase.storage
       .from(bucket)
@@ -65,9 +56,7 @@ export class SupabaseService {
     return data;
   }
 
-  /**
-   * Obtener URL pública de un archivo
-   */
+  
   getPublicUrl(bucket: string, path: string): string {
     const { data } = this.supabase.storage
       .from(bucket)
@@ -76,9 +65,7 @@ export class SupabaseService {
     return data.publicUrl;
   }
 
-  /**
-   * Eliminar archivo de Storage
-   */
+ 
   async deleteFile(bucket: string, path: string) {
     const { error } = await this.supabase.storage
       .from(bucket)
@@ -87,9 +74,7 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  /**
-   * Suscribirse a cambios en tiempo real de una tabla
-   */
+  
   subscribeToTable(table: string, callback: (payload: any) => void) {
     return this.supabase
       .channel(`public:${table}`)
@@ -101,9 +86,7 @@ export class SupabaseService {
       .subscribe();
   }
 
-  /**
-   * Desuscribirse de un canal
-   */
+ 
   async unsubscribe(channel: any) {
     await this.supabase.removeChannel(channel);
   }

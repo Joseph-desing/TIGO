@@ -8,7 +8,7 @@ export interface UserProfile {
   telefono?: string;
   rol: UserRole;
   avatar_url?: string;
-  estado?: string; // 👈 AGREGAR ESTA LÍNEA
+  estado?: string; 
   created_at?: string;
   updated_at?: string;
 }

@@ -54,11 +54,11 @@ export class LoginPage implements OnInit {
 
     try {
       const { email, password } = this.loginForm.value;
-      console.log('🔐 Intentando login como usuario...');
+      console.log(' Intentando login como usuario...');
 
       const user = await this.authService.login({ email, password });
 
-      console.log('✅ Login exitoso:', user);
+      console.log(' Login exitoso:', user);
 
       // Guardar rol en localStorage
       localStorage.setItem('rol', user.rol);
@@ -76,7 +76,7 @@ export class LoginPage implements OnInit {
       this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
 
     } catch (error: any) {
-      console.error('❌ Login usuario error:', error);
+      console.error(' Login usuario error:', error);
       
       let message = 'Correo o contraseña incorrectos';
       
@@ -105,11 +105,11 @@ export class LoginPage implements OnInit {
 
     try {
       const { email, password } = this.loginForm.value;
-      console.log('🔐 Intentando login como asesor...');
+      console.log(' Intentando login como asesor...');
 
       const user = await this.authService.login({ email, password });
 
-      console.log('✅ Login exitoso:', user);
+      console.log(' Login exitoso:', user);
 
       // Guardar rol en localStorage
       localStorage.setItem('rol', user.rol);
@@ -127,7 +127,7 @@ export class LoginPage implements OnInit {
       this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
 
     } catch (error: any) {
-      console.error('❌ Login asesor error:', error);
+      console.error(' Login asesor error:', error);
       
       let message = 'Correo o contraseña incorrectos';
       
@@ -192,7 +192,6 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  /** Mostrar toast */
   async showToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,

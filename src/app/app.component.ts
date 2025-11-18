@@ -8,8 +8,8 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['app.component.scss'],
   standalone: true,
   imports: [
-    IonicModule,   // 👉 aquí viene IonApp, IonRouterOutlet, etc
-    RouterModule   // 👉 para que funcione el router
+    IonicModule,   
+    RouterModule   
   ],
 })
 export class AppComponent {

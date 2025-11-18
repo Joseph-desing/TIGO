@@ -41,17 +41,17 @@ export class DashboardAsesorPage implements OnInit {
 
   ngOnInit() {}
 
-  // 👉 Crear nuevo plan
+  //  Crear nuevo plan
   crearNuevoPlan() {
     this.router.navigate(['/pages/crear-plan']);
   }
 
-  // 👉 Editar plan
+  //  Editar plan
   editarPlan(plan: any) {
     this.router.navigate(['/pages/detalle-plan', plan.id]);
   }
 
-  // 👉 Eliminar plan (con alerta + refresco del array)
+  //  Eliminar plan (con alerta + refresco del array)
   async eliminarPlan(plan: any) {
     const alert = await this.alertCtrl.create({
       header: 'Eliminar plan',
@@ -63,7 +63,7 @@ export class DashboardAsesorPage implements OnInit {
           role: 'destructive',
           handler: async () => {
             
-            // Eliminar del array ⚡
+            // Eliminar del array 
             this.planesActivos = [
               ...this.planesActivos.filter(p => p.id !== plan.id)
             ];
@@ -76,7 +76,6 @@ export class DashboardAsesorPage implements OnInit {
             });
             t.present();
 
-            // 👉 Aquí luego agregamos DELETE en Supabase
           }
         }
       ]

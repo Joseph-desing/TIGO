@@ -3,6 +3,17 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
+import { SupabaseService } from '../../core/services/supabase';
+
+interface ConversacionItem {
+  id: string;
+  nombre: string;
+  email: string;
+  ultimoMensaje?: string;
+  hora?: string;
+  tieneNoLeidos?: boolean;
+}
+
 @Component({
   selector: 'app-chats-asesor',
   templateUrl: './chats-asesor.page.html',
@@ -12,57 +23,61 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ChatsAsesorPage implements OnInit {
 
-  conversaciones = [
-    {
-      id: 1,
-      nombre: 'María González',
-      inicial: 'M',
-      hora: '10:45',
-      mensaje: '¿Cuándo se activa mi plan?',
-      leido: false,
-    },
-    {
-      id: 2,
-      nombre: 'Carlos Ramírez',
-      inicial: 'C',
-      hora: '09:30',
-      mensaje: 'Gracias por tu ayuda',
-      leido: true,
-    },
-    {
-      id: 3,
-      nombre: 'Ana López',
-      inicial: 'A',
-      hora: 'Ayer',
-      mensaje: '¿Tienen promociones?',
-      leido: false,
-    },
-  ];
+  conversaciones: ConversacionItem[] = [];
+  loading = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {}
-
-  abrirChat(conv: any) {
-    console.log('Abrir chat con', conv.nombre);
-    // aquí luego puedes navegar a /chat con parámetros
-    this.router.navigate(['/chat']);
+  ngOnInit() {
+    this.cargarConversaciones();
   }
 
-  // Tabs del footer
-  goToPlanes() {
-    this.router.navigate(['/pages/dashboard-asesor']);
+  // 🔹 Traer desde Supabase solo usuarios registrados
+  async cargarConversaciones() {
+    this.loading = true;
+    const supabase = this.supabaseService.getClient();
+
+    // perfiles: id, nombre, apellido, email, rol, estado
+    const { data, error } = await supabase
+      .from('perfiles')
+      .select('id, nombre, apellido, email, estado, rol')
+      .eq('rol', 'usuario_registrado'); // 👈 solo usuarios
+
+    if (error) {
+      console.error('Error cargando conversaciones:', error);
+      this.loading = false;
+      return;
+    }
+
+    // Mapear a estructura de la lista
+    this.conversaciones = (data || []).map((p: any, index: number) => ({
+      id: p.id,
+      nombre: `${p.nombre || ''} ${p.apellido || ''}`.trim(),
+      email: p.email,
+      // De momento datos “mock” para la vista; luego puedes
+      // reemplazar con info real de mensajes_chat si quieres.
+      ultimoMensaje: 'Toca para chatear',
+      hora: '',
+      tieneNoLeidos: false
+    }));
+
+    this.loading = false;
   }
 
-  goToSolicitudes() {
-    this.router.navigate(['/pages/solicitudes-asesor']);
+  // Al tocar una conversación, ir a la pantalla de chat
+  abrirChat(conv: ConversacionItem) {
+    // Aquí puedes pasar el id del usuario para usarlo en la página de chat
+    this.router.navigate(['/chat'], {
+      queryParams: { userId: conv.id, nombre: conv.nombre }
+    });
   }
 
-  goToChats() {
-    // ya estás aquí
-  }
-
-  goToPerfil() {
-    this.router.navigate(['/pages/perfil-asesor']);
-  }
+  // Footer tabs del asesor
+  goToPlanes()      { this.router.navigate(['/pages/dashboard-asesor']); }
+  goToSolicitudes() { this.router.navigate(['/pages/solicitudes-asesor']); }
+  goToChats()       {} // ya estás aquí
+  goToPerfil()      { this.router.navigate(['/pages/perfil-asesor']); }
 }

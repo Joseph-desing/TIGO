@@ -1,7 +1,22 @@
+// src/app/pages/solicitudes-asesor/solicitudes-asesor.page.ts
+
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+
+import { SupabaseService } from '../../core/services/supabase';
+import { AuthService } from '../../core/services/auth';
+
+type EstadoSolicitud = 'PENDIENTE' | 'APROBADO' | 'RECHAZADO';
+
+interface SolicitudItem {
+  id: string;
+  cliente: string;
+  plan: string;
+  fecha: string;
+  estado: EstadoSolicitud;
+}
 
 @Component({
   selector: 'app-solicitudes-asesor',
@@ -12,69 +27,134 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class SolicitudesAsesorPage implements OnInit {
 
-  // 🔹 Datos de ejemplo (luego los sacas de Supabase: tabla "contrataciones")
-  solicitudes = [
-    {
-      id: 1,
-      cliente: 'María González',
-      plan: 'Plan Premium 15GB',
-      fecha: '2024-11-10',
-      estado: 'PENDIENTE' as 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
-    },
-    {
-      id: 2,
-      cliente: 'Carlos Ramírez',
-      plan: 'Plan Smart 5GB',
-      fecha: '2024-11-09',
-      estado: 'PENDIENTE' as 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
-    },
-    {
-      id: 3,
-      cliente: 'Ana López',
-      plan: 'Plan Ilimitado',
-      fecha: '2024-11-08',
-      estado: 'APROBADO' as 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
-    }
-  ];
+  solicitudes: SolicitudItem[] = [];
+  loading = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private authService: AuthService,
+    private router: Router,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController
+  ) {}
 
   ngOnInit() {
-    // aquí luego llamarás a Supabase para cargar solicitudes reales
+    this.cargarSolicitudes();
   }
 
-  aprobarSolicitud(s: any) {
-    s.estado = 'APROBADO';
-    // TODO: llamar a Supabase para actualizar estado en "contrataciones"
-    console.log('Aprobar solicitud', s);
+  // 🔹 Traer solicitudes desde Supabase SOLO de usuarios registrados
+  async cargarSolicitudes() {
+    this.loading = true;
+    const supabase = this.supabaseService.getClient();
+
+    // Ajusta los nombres de relaciones si tu FK tiene otro nombre
+    const { data, error } = await supabase
+      .from('contrataciones')
+      .select(`
+        id,
+        estado,
+        fecha_contratacion,
+        perfiles:perfiles!inner (
+          nombre,
+          apellido,
+          rol
+        ),
+        planes_moviles:planes_moviles!inner (
+          nombre
+        )
+      `)
+      .in('estado', ['PENDIENTE', 'APROBADO', 'RECHAZADO'])
+      .eq('perfiles.rol', 'usuario_registrado')   // 👈 solo usuarios registrados
+      .order('fecha_contratacion', { ascending: false });
+
+    if (error) {
+      console.error('Error cargando solicitudes:', error);
+      this.loading = false;
+      return;
+    }
+
+    this.solicitudes = (data || []).map((row: any) => ({
+      id: row.id,
+      cliente: `${row.perfiles?.nombre || ''} ${row.perfiles?.apellido || ''}`.trim(),
+      plan: row.planes_moviles?.nombre || 'Plan sin nombre',
+      fecha: row.fecha_contratacion
+        ? new Date(row.fecha_contratacion).toISOString().slice(0, 10)
+        : '',
+      estado: (row.estado || 'PENDIENTE') as EstadoSolicitud,
+    }));
+
+    this.loading = false;
   }
 
-  rechazarSolicitud(s: any) {
-    s.estado = 'RECHAZADO';
-    // TODO: update Supabase
-    console.log('Rechazar solicitud', s);
+  // Cambiar estado a APROBADO
+  async aprobarSolicitud(s: SolicitudItem) {
+    await this.cambiarEstado(s, 'APROBADO');
   }
 
-  abrirChat(s: any) {
-    // Puedes navegar al chat con el usuario
-    console.log('Abrir chat con', s.cliente);
-    this.router.navigate(['/chat']);
+  // Cambiar estado a RECHAZADO
+  async rechazarSolicitud(s: SolicitudItem) {
+    await this.cambiarEstado(s, 'RECHAZADO');
   }
 
-  // 🔹 Footer tabs del asesor
-  goToPlanes() {
-    this.router.navigate(['/pages/dashboard-asesor']);
+  // 🔹 Actualiza en Supabase + refresca en pantalla
+  private async cambiarEstado(s: SolicitudItem, nuevoEstado: EstadoSolicitud) {
+    const supabase = this.supabaseService.getClient();
+    const asesor = this.authService.getCurrentUser();
+
+    const alert = await this.alertCtrl.create({
+      header: nuevoEstado === 'APROBADO' ? 'Aprobar solicitud' : 'Rechazar solicitud',
+      message: `¿Seguro que deseas marcar la solicitud de <b>${s.cliente}</b> como <b>${nuevoEstado}</b>?`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Confirmar',
+          handler: async () => {
+            // actualizar en BD
+            const { error } = await supabase
+              .from('contrataciones')
+              .update({
+                estado: nuevoEstado,
+                updated_at: new Date().toISOString(),
+                asesor_asignado: asesor?.id || null,
+              })
+              .eq('id', s.id);
+
+            if (error) {
+              console.error('Error actualizando estado:', error);
+              const tErr = await this.toastCtrl.create({
+                message: 'No se pudo actualizar la solicitud',
+                duration: 2000,
+                color: 'danger',
+              });
+              tErr.present();
+              return;
+            }
+
+            // actualizar en memoria
+            this.solicitudes = this.solicitudes.map(sol =>
+              sol.id === s.id ? { ...sol, estado: nuevoEstado } : sol
+            );
+
+            const tOk = await this.toastCtrl.create({
+              message:
+                nuevoEstado === 'APROBADO'
+                  ? 'Solicitud aprobada correctamente'
+                  : 'Solicitud rechazada correctamente',
+              duration: 2000,
+              color: nuevoEstado === 'APROBADO' ? 'success' : 'danger',
+            });
+            tOk.present();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
-  goToSolicitudes() {
-    // ya estás aquí
-  }
-
-  goToChats() {
-    this.router.navigate(['/chat']);
-  }
-
-  goToPerfil() {
-    this.router.navigate(['/pages/dashboard-asesor/perfil']); // ajusta si creas esa página
-  }
+  // Footer tabs
+  goToPlanes()      { this.router.navigate(['/pages/dashboard-asesor']); }
+  goToSolicitudes() {} // ya estás aquí
+  goToChats()       { this.router.navigate(['/pages/chats-asesor']); }
+  goToPerfil()      { this.router.navigate(['/pages/perfil-asesor']); }
 }

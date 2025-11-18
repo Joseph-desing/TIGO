@@ -31,12 +31,10 @@ export class SplashPage implements OnInit {
 }
 
 
-  /** 👉 IR A LOGIN */
   goLogin() {
     this.router.navigate(['/pages/auth/login'], { replaceUrl: true });
   }
 
-  /** 👉 IR A REGISTRO */
   goRegister() {
     this.router.navigate(['/pages/auth/register'], { replaceUrl: true });
   }

@@ -36,7 +36,7 @@ export class AuthService {
     const supabase = this.supabaseService.getClient();
 
     try {
-      console.log('📝 Registrando usuario con email:', data.email);
+      console.log(' Registrando usuario con email:', data.email);
 
       // 1. Crear usuario en Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -53,7 +53,7 @@ export class AuthService {
       });
 
       if (authError) {
-        console.error('❌ Error en signUp:', authError);
+        console.error('Error en signUp:', authError);
         throw authError;
       }
 
@@ -61,7 +61,7 @@ export class AuthService {
         throw new Error('No se pudo crear el usuario');
       }
 
-      console.log('✅ Usuario creado en Auth:', authData.user.id);
+      console.log(' Usuario creado en Auth:', authData.user.id);
 
       // 2. Esperar para asegurar que el usuario existe
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -74,13 +74,13 @@ export class AuthService {
         .single();
 
       if (existingProfile) {
-        console.log('✅ Perfil ya existía');
+        console.log(' Perfil ya existía');
         this.currentUserSubject.next(existingProfile);
         return existingProfile;
       }
 
       // 4. Si no existe, crear perfil manualmente
-      console.log('📝 Creando perfil manualmente...');
+      console.log(' Creando perfil manualmente...');
       
       const profileToInsert = {
         id: authData.user.id,
@@ -98,7 +98,7 @@ export class AuthService {
         .single();
 
       if (profileError) {
-        console.error('❌ Error al crear perfil:', profileError);
+        console.error(' Error al crear perfil:', profileError);
         
         // Intentar cargar el perfil por si ya existe
         try {
@@ -109,12 +109,12 @@ export class AuthService {
         }
       }
 
-      console.log('✅ Perfil creado exitosamente');
+      console.log(' Perfil creado exitosamente');
       this.currentUserSubject.next(profileData);
       return profileData;
 
     } catch (error: any) {
-      console.error('❌ Error en registro:', error);
+      console.error(' Error en registro:', error);
 
       if (error.message?.includes('User already registered') || 
           error.message?.includes('already registered')) {

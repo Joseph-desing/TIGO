@@ -1,76 +1,69 @@
 .perfil-content {
-  --background: #f4f5f8;
-}
-
-.perfil-wrapper {
-  padding: 16px 16px 80px;
+  --background: #ffffff;
 }
 
 .perfil-card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin: 24px 16px;
+  padding: 24px 16px;
+  background: #111111;
+  border-radius: 12px;
+  color: #ffffff;
 }
 
-.perfil-header-card {
-  text-align: center;
-
-  h2 {
-    margin-top: 10px;
-    margin-bottom: 4px;
-    font-size: 1.05rem;
-    font-weight: 600;
-  }
-
-  .email {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #757575;
-  }
+.perfil-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.avatar-grande {
-  width: 80px;
-  height: 80px;
+.avatar-circle {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: #3f51b5;
-  color: #fff;
-  margin: 0 auto;
+  background: #1e88ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.perfil-main-text h2 {
+  margin: 0;
+  font-size: 18px;
   font-weight: 600;
 }
 
-.campo {
-  margin-bottom: 10px;
+.perfil-email {
+  margin: 0;
+  font-size: 13px;
+  color: #cccccc;
+}
 
-  label {
-    font-size: 0.75rem;
-    color: #9e9e9e;
-  }
+.field-block {
+  margin-bottom: 16px;
+}
 
-  div {
-    font-size: 0.9rem;
-    margin-top: 2px;
-  }
+.field-label {
+  font-size: 12px;
+  color: #bbbbbb;
+  margin-bottom: 4px;
+}
+
+.field-value {
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.field-input {
+  --background: #222222;
+  --color: #ffffff;
+  --border-radius: 8px;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
 }
 
 .asesor-tabs {
-  ion-segment-button {
-    --indicator-color: transparent;
-    --color-checked: #3f51b5;
-  }
-
-  ion-icon {
-    font-size: 18px;
-    margin-bottom: 2px;
-  }
-
-  ion-label {
-    font-size: 0.7rem;
-  }
+  --background: #ffffff;
 }

@@ -39,7 +39,6 @@ export class RegisterPage implements OnInit {
       apellido: [''],
       email: ['', [Validators.required, Validators.email]],
       telefono: [''],
-      // 👇 NUEVO: control para el rol
       rol: ['usuario_registrado', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
@@ -94,12 +93,7 @@ export class RegisterPage implements OnInit {
       // Mostrar mensaje de éxito
       await this.showToast('¡Cuenta creada exitosamente!', 'success');
 
-      // 👉 Aquí podrías redirigir distinto según rol si quieres:
-      // if (registerData.rol === 'asesor_comercial') {
-      //   this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
-      // } else {
-      //   this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
-      // }
+     
 
       this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
 

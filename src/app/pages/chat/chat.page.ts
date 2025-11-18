@@ -66,7 +66,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
       // 4) Suscribirse a cambios en tiempo real
       this.subscription = this.chatService.onMensajesChange(
-        this.contratacionId as string,          // 👈 cast para evitar el error de TS
+        this.contratacionId as string,          
         (nuevo: any) => {
           const esPropio = nuevo.sender_id === this.userId;
           this.mensajes.push({ ...nuevo, esPropio });
@@ -95,8 +95,8 @@ export class ChatPage implements OnInit, OnDestroy {
     if (!this.contratacionId || !this.userId) return;
 
     const enviado = await this.chatService.enviarMensaje(
-      this.contratacionId as string,      // 👈 cast
-      this.userId as string,              // 👈 cast
+      this.contratacionId as string,      
+      this.userId as string,              
       this.nuevoMensaje.trim()
     );
 

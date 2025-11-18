@@ -117,11 +117,11 @@ export class Tab3Page implements OnInit {
 
       const payload = {
         id: this.userId,
-        email: this.email,                                // email NO puede ser null
+        email: this.email,                               
         nombre: this.perfil.nombre || null,
         apellido: this.perfil.apellido || null,
         telefono: this.perfil.telefono || null,
-        rol: this.perfil.rol || 'usuario_registrado',     // rol NO puede ser null
+        rol: this.perfil.rol || 'usuario_registrado',     
       };
 
       const { error } = await db

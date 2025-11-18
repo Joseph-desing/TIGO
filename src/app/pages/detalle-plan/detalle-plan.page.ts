@@ -17,7 +17,6 @@ export class DetallePlanPage implements OnInit {
   planId: number | null = null;
   modoEdicion = false;
 
-  // 🔹 MOCK de planes (luego esto se reemplaza por Supabase)
   private MOCK_PLANES = [
     {
       id: 1,
@@ -68,7 +67,7 @@ export class DetallePlanPage implements OnInit {
     });
   }
 
-  // 🔹 Cargar datos de ejemplo según el ID (luego será desde Supabase)
+  //  Cargar datos de ejemplo según el ID (luego será desde Supabase)
   cargarPlan(id: number) {
     const plan = this.MOCK_PLANES.find(p => p.id === id);
     if (plan) {
@@ -90,11 +89,9 @@ export class DetallePlanPage implements OnInit {
     }
 
     const datos = this.planForm.value;
-    console.log('✅ Datos del plan a guardar:', { id: this.planId, ...datos });
+    console.log(' Datos del plan a guardar:', { id: this.planId, ...datos });
 
-    // TODO: aquí llamas a Supabase:
-    // - si this.modoEdicion === true → update en planes_moviles
-    // - si no → insert nuevo plan
+   
 
     const toast = await this.toastCtrl.create({
       message: this.modoEdicion
@@ -105,7 +102,6 @@ export class DetallePlanPage implements OnInit {
     });
     await toast.present();
 
-    // Volver al dashboard del asesor
     this.router.navigate(['/pages/dashboard-asesor']);
   }
 

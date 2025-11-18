@@ -5,67 +5,61 @@
     <ion-chip slot="start" color="success" class="rol-chip">
       <ion-label>Asesor Comercial</ion-label>
     </ion-chip>
-
-    <ion-buttons slot="end">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="chats-content">
 
-  <ion-list lines="none">
+  <ion-list *ngIf="conversaciones.length > 0; else noChats">
     <ion-item
-      *ngFor="let c of conversaciones"
+      button
+      detail="false"
       class="chat-item"
-      (click)="abrirChat(c)"
-      detail="false">
+      *ngFor="let c of conversaciones"
+      (click)="abrirChat(c)">
 
-      <ion-avatar slot="start" class="chat-avatar">
-        <div class="avatar-circle">
-          {{ c.inicial }}
-        </div>
-      </ion-avatar>
+      <!-- Avatar redondo con inicial -->
+      <div class="avatar-circle" slot="start">
+        <span>{{ c.nombre?.[0] || 'U' }}</span>
+      </div>
 
       <ion-label>
-        <div class="chat-header">
-          <h2>{{ c.nombre }}</h2>
-          <span class="hora">{{ c.hora }}</span>
-        </div>
-        <p class="mensaje">{{ c.mensaje }}</p>
+        <h2>{{ c.nombre }}</h2>
+        <p>{{ c.ultimoMensaje }}</p>
       </ion-label>
 
-      <!-- Punto azul de no leído -->
-      <div
-        class="unread-dot"
-        *ngIf="!c.leido">
+      <div class="chat-right">
+        <span class="hora" *ngIf="c.hora">{{ c.hora }}</span>
+        <span class="dot" *ngIf="c.tieneNoLeidos"></span>
       </div>
     </ion-item>
   </ion-list>
 
+  <ng-template #noChats>
+    <div class="empty-state">
+      <p>No hay usuarios registrados todavía.</p>
+    </div>
+  </ng-template>
+
 </ion-content>
 
-<!-- Footer tabs asesor -->
+<!-- Footer tabs del asesor -->
 <ion-footer>
   <ion-toolbar>
     <ion-segment value="chats" class="asesor-tabs">
       <ion-segment-button value="planes" (click)="goToPlanes()">
-        <ion-icon name="cube-outline"></ion-icon>
         <ion-label>Planes</ion-label>
       </ion-segment-button>
 
       <ion-segment-button value="solicitudes" (click)="goToSolicitudes()">
-        <ion-icon name="cart-outline"></ion-icon>
         <ion-label>Solicitudes</ion-label>
       </ion-segment-button>
 
       <ion-segment-button value="chats">
-        <ion-icon name="chatbubbles-outline"></ion-icon>
         <ion-label>Chats</ion-label>
       </ion-segment-button>
 
       <ion-segment-button value="perfil" (click)="goToPerfil()">
-        <ion-icon name="person-circle-outline"></ion-icon>
         <ion-label>Perfil</ion-label>
       </ion-segment-button>
     </ion-segment>

@@ -99,7 +99,7 @@ export const routes: Routes = [
       import('./pages/dashboard-usuario/dashboard-usuario.page')
         .then(m => m.DashboardUsuarioPage),
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['usuario_registrado'] } // ✅ unificado
+    data: { roles: ['usuario_registrado'] } 
   },
 
   // Dashboard INVITADO (SIN guards)
