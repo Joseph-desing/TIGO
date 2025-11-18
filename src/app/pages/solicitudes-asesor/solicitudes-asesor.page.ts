@@ -1,5 +1,3 @@
-// src/app/pages/solicitudes-asesor/solicitudes-asesor.page.ts
-
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ToastController, AlertController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -42,41 +40,44 @@ export class SolicitudesAsesorPage implements OnInit {
     this.cargarSolicitudes();
   }
 
-  // 🔹 Traer solicitudes desde Supabase SOLO de usuarios registrados
+  // 🔹 Traer solicitudes desde Supabase (contrataciones + perfiles + planes_moviles)
   async cargarSolicitudes() {
     this.loading = true;
     const supabase = this.supabaseService.getClient();
 
-    // Ajusta los nombres de relaciones si tu FK tiene otro nombre
     const { data, error } = await supabase
       .from('contrataciones')
       .select(`
         id,
         estado,
         fecha_contratacion,
-        perfiles:perfiles!inner (
+        user:perfiles!contrataciones_user_id_fkey(
+          id,
           nombre,
           apellido,
+          telefono,
+          email,
           rol
         ),
-        planes_moviles:planes_moviles!inner (
-          nombre
+        plan:planes_moviles!contrataciones_plan_id_fkey(
+          id,
+          nombre,
+          precio
         )
       `)
-      .in('estado', ['PENDIENTE', 'APROBADO', 'RECHAZADO'])
-      .eq('perfiles.rol', 'usuario_registrado')   // 👈 solo usuarios registrados
       .order('fecha_contratacion', { ascending: false });
 
     if (error) {
       console.error('Error cargando solicitudes:', error);
+      this.solicitudes = [];
       this.loading = false;
       return;
     }
 
     this.solicitudes = (data || []).map((row: any) => ({
       id: row.id,
-      cliente: `${row.perfiles?.nombre || ''} ${row.perfiles?.apellido || ''}`.trim(),
-      plan: row.planes_moviles?.nombre || 'Plan sin nombre',
+      cliente: `${row.user?.nombre || ''} ${row.user?.apellido || ''}`.trim(),
+      plan: row.plan?.nombre || 'Plan sin nombre',
       fecha: row.fecha_contratacion
         ? new Date(row.fecha_contratacion).toISOString().slice(0, 10)
         : '',
@@ -86,17 +87,17 @@ export class SolicitudesAsesorPage implements OnInit {
     this.loading = false;
   }
 
-  // Cambiar estado a APROBADO
+  // 🔹 Aprobar
   async aprobarSolicitud(s: SolicitudItem) {
     await this.cambiarEstado(s, 'APROBADO');
   }
 
-  // Cambiar estado a RECHAZADO
+  // 🔹 Rechazar
   async rechazarSolicitud(s: SolicitudItem) {
     await this.cambiarEstado(s, 'RECHAZADO');
   }
 
-  // 🔹 Actualiza en Supabase + refresca en pantalla
+  // 🔹 Cambiar estado en Supabase + refrescar UI
   private async cambiarEstado(s: SolicitudItem, nuevoEstado: EstadoSolicitud) {
     const supabase = this.supabaseService.getClient();
     const asesor = this.authService.getCurrentUser();
@@ -109,7 +110,6 @@ export class SolicitudesAsesorPage implements OnInit {
         {
           text: 'Confirmar',
           handler: async () => {
-            // actualizar en BD
             const { error } = await supabase
               .from('contrataciones')
               .update({
@@ -130,7 +130,7 @@ export class SolicitudesAsesorPage implements OnInit {
               return;
             }
 
-            // actualizar en memoria
+            // Actualizar en memoria
             this.solicitudes = this.solicitudes.map(sol =>
               sol.id === s.id ? { ...sol, estado: nuevoEstado } : sol
             );
@@ -152,7 +152,7 @@ export class SolicitudesAsesorPage implements OnInit {
     await alert.present();
   }
 
-  // Footer tabs
+  // 🔹 Navegación footer
   goToPlanes()      { this.router.navigate(['/pages/dashboard-asesor']); }
   goToSolicitudes() {} // ya estás aquí
   goToChats()       { this.router.navigate(['/pages/chats-asesor']); }

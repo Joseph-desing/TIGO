@@ -10,7 +10,12 @@
 
 <ion-content class="solicitudes-content">
 
-  <ion-list *ngIf="solicitudes.length; else sinSolicitudes">
+  <!-- Loader simple -->
+  <div *ngIf="loading" class="loading-state">
+    Cargando solicitudes...
+  </div>
+
+  <ion-list *ngIf="!loading && solicitudes.length; else sinSolicitudes">
     <ion-card class="solicitud-card" *ngFor="let s of solicitudes">
       <ion-card-content>
 
