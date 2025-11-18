@@ -1,51 +1,100 @@
-<ion-content class="ion-padding dashboard-asesor">
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Panel de Asesor</ion-title>
 
-  <ion-header collapse="condense" class="custom-header">
-    <ion-toolbar>
-      <ion-title>Panel del Asesor</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-chip slot="start" color="success" class="rol-chip">
+      <ion-label>Asesor Comercial</ion-label>
+    </ion-chip>
 
-  <div class="welcome">
-    <h1>Hola, Asesor Tigo 👋</h1>
-    <p>Gestiona tus planes y contrataciones</p>
-  </div>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="cards">
+<ion-content [fullscreen]="true" class="dashboard-asesor">
 
-    <ion-card button="true" (click)="verCatalogoPlanes()">
+  <div class="content-wrapper">
+
+    <!-- Tarjeta de gestión de planes -->
+    <ion-card class="card-gestion">
       <ion-card-header>
-        <ion-card-title>Catálogo de planes</ion-card-title>
+        <ion-card-title>Gestión de Planes</ion-card-title>
+        <ion-card-subtitle>Administra el catálogo de planes móviles</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        Revisa los planes disponibles y su información comercial.
+        <ion-button expand="block" color="primary" (click)="crearNuevoPlan()">
+          + Crear Nuevo Plan
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card button="true" (click)="verContrataciones()">
-      <ion-card-header>
-        <ion-card-title>Contrataciones</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        Consulta las contrataciones de los clientes y accede al chat.
-      </ion-card-content>
-    </ion-card>
+    <!-- Lista de Planes Activos -->
+    <div class="section-title">
+      <h3>Planes Activos</h3>
+    </div>
 
-    <ion-card button="true" (click)="verPerfilAsesor()">
-      <ion-card-header>
-        <ion-card-title>Mi perfil</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        Revisa y actualiza tus datos como asesor comercial.
-      </ion-card-content>
-    </ion-card>
+    <ion-list class="planes-list">
+      <ion-card *ngFor="let plan of planesActivos" class="plan-card">
+        <div class="plan-banner"></div>
 
-  </div>
+        <ion-card-content>
+          <div class="plan-header">
+            <h2>{{ plan.nombre }}</h2>
+            <span class="precio">${{ plan.precio | number : '1.2-2' }}</span>
+          </div>
 
-  <div class="footer">
-    <ion-button fill="clear" (click)="irSplash()">
-      Volver al inicio
-    </ion-button>
+          <div class="plan-badge" *ngIf="plan.promocion">
+            {{ plan.promocion }}
+          </div>
+
+          <p class="plan-desc">
+            {{ plan.descripcion }}
+          </p>
+
+          <div class="plan-detalles">
+            <span>{{ plan.datos }}</span>
+            <span>{{ plan.minutos }}</span>
+          </div>
+
+          <div class="plan-actions">
+            <ion-button size="small" color="success" (click)="editarPlan(plan)">
+              Editar
+            </ion-button>
+            <ion-button size="small" color="danger" fill="solid" (click)="eliminarPlan(plan)">
+              Eliminar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
   </div>
 
 </ion-content>
+
+<!-- Barra inferior tipo tabs para el asesor -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment value="planes" class="asesor-tabs">
+      <ion-segment-button value="planes" (click)="goToPlanes()">
+        <ion-icon name="cube-outline"></ion-icon>
+        <ion-label>Planes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="solicitudes" (click)="goToSolicitudes()">
+        <ion-icon name="cart-outline"></ion-icon>
+        <ion-label>Solicitudes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="chats" (click)="goToChats()">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <ion-label>Chats</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="perfil" (click)="goToPerfil()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Perfil</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

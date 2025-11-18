@@ -1,13 +1,48 @@
-<ion-header [translucent]="true">
+<ion-header class="chat-header">
   <ion-toolbar>
-    <ion-title>chat</ion-title>
+    <div class="header-top">
+      <span class="badge-rol">Usuario Registrado</span>
+    </div>
+    <div class="header-title">
+      <h1>Chat con Asesor</h1>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">chat</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="chat-content">
+  <div class="messages-container">
+
+    <div
+      class="message-row"
+      *ngFor="let m of mensajes"
+      [ngClass]="{ 'from-user': m.esPropio, 'from-asesor': !m.esPropio }"
+    >
+      <div class="message-bubble">
+        <p class="message-text">
+          {{ m.mensaje }}   <!-- AQUI ES EL FIX -->
+        </p>
+
+        <span class="message-time">
+          {{ m.created_at | date:'HH:mm' }}
+        </span>
+      </div>
+    </div>
+
+  </div>
 </ion-content>
+
+<ion-footer class="chat-footer">
+  <ion-toolbar>
+    <div class="input-wrapper">
+      <ion-input
+        [(ngModel)]="nuevoMensaje"
+        placeholder="Escribe tu mensaje..."
+        (keyup.enter)="enviarMensaje()"
+      ></ion-input>
+
+      <ion-button shape="round" (click)="enviarMensaje()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

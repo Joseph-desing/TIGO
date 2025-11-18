@@ -1,13 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>detalle-plan</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/pages/dashboard-asesor"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{ modoEdicion ? 'Editar Plan' : 'Detalle del Plan' }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">detalle-plan</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="detalle-plan-content">
+
+  <form [formGroup]="planForm" (ngSubmit)="guardar()" class="form-wrapper">
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{ modoEdicion ? 'Editar Plan Móvil' : 'Información del Plan' }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          Completa o actualiza los datos del plan.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Nombre del plan -->
+        <ion-item lines="full">
+          <ion-label position="stacked">Nombre del Plan</ion-label>
+          <ion-input
+            formControlName="nombre"
+            placeholder="Ej: Plan Smart 5GB">
+          </ion-input>
+        </ion-item>
+
+        <!-- Precio -->
+        <ion-item lines="full">
+          <ion-label position="stacked">Precio Mensual ($)</ion-label>
+          <ion-input
+            type="number"
+            formControlName="precio"
+            placeholder="Ej: 19.99">
+          </ion-input>
+        </ion-item>
+
+        <!-- Datos y minutos -->
+        <div class="row-2">
+          <ion-item lines="full">
+            <ion-label position="stacked">Gigas de Datos</ion-label>
+            <ion-input
+              formControlName="datos"
+              placeholder="Ej: 10 GB">
+            </ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="stacked">Minutos de Llamadas</ion-label>
+            <ion-input
+              formControlName="minutos"
+              placeholder="Ej: 200 min o Ilimitado">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Descripción -->
+        <ion-item lines="full">
+          <ion-label position="stacked">Descripción</ion-label>
+          <ion-textarea
+            formControlName="descripcion"
+            placeholder="Describe las características del plan...">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Promoción -->
+        <ion-item lines="full">
+          <ion-label position="stacked">Promoción (Opcional)</ion-label>
+          <ion-input
+            formControlName="promocion"
+            placeholder="Ej: ¡Primer mes gratis!">
+          </ion-input>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de acción -->
+    <div class="buttons-wrapper">
+      <ion-button expand="block" type="submit" color="primary">
+        {{ modoEdicion ? 'Guardar Cambios' : 'Guardar' }}
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" color="medium" (click)="cancelar()">
+        Cancelar
+      </ion-button>
+    </div>
+
+  </form>
+
 </ion-content>

@@ -146,3 +146,35 @@ ion-input {
 ion-input input {
   color: #000 !important;
 }
+/* 🔹 Estilos del selector de rol */
+.form-group {
+
+  /* Label de arriba */
+  .label {
+    color: #000 !important;
+    font-weight: 600;
+  }
+
+  /* El ion-item del select */
+  .input-item {
+    --background: #ffffff !important;
+    color: #000 !important;
+  }
+
+  /* Select (texto visible) */
+  ion-select {
+    color: #000 !important;
+    --color: #000 !important;
+    font-size: 14px;
+  }
+
+  /* Icono del select */
+  ion-icon {
+    color: #000 !important;
+  }
+
+  /* Opciones del popover */
+  ion-select-option {
+    color: #000 !important;
+  }
+}

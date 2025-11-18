@@ -1,41 +1,121 @@
-.perfil-page {
-  --background: #f4f7fb;
-}
+.perfil-content {
+  --background: #f5f7fb;
 
-.profile-top {
-  text-align: center;
-  margin-bottom: 16px;
+  .perfil-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 16px;
+    gap: 8px;
+  }
 
   .avatar {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
-    margin: 0 auto 8px;
-    background: #0052d9;
-    color: #fff;
+    border-radius: 999px;
+    background: #0054e9;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1.4rem;
-  }
-
-  p {
-    margin: 4px 0 0;
-    color: #666;
-  }
-}
-
-ion-card {
-  border-radius: 16px;
-  margin-bottom: 16px;
-
-  p {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 600;
     margin-bottom: 8px;
   }
+
+  .perfil-nombre {
+    text-align: center;
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .perfil-email {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: #555;
+    }
+  }
+
+  .perfil-card {
+    margin: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    background: #202124;
+    color: #f5f5f5;
+  }
+
+  .perfil-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+
+    .label {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .value {
+      font-size: 14px;
+    }
+  }
+
+  .acciones {
+    margin: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-edicion {
+    margin: 16px;
+
+    ion-item {
+      border-radius: 12px;
+      margin-bottom: 8px;
+      --background: #ffffff;
+    }
+  }
+
+  .cargando {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
+/* FORMULARIO DE EDICIÓN: TEXTO NEGRO */
+.form-edicion {
+
+  ion-label {
+    color: #000 !important; /* etiqueta */
+  }
+
+  ion-input {
+    --color: #000 !important;           /* texto del input */
+    --placeholder-color: #777 !important; /* placeholder gris */
+    --background: #ffffff !important;   /* fondo blanco */
+    color: #000 !important;             /* por si acaso */
+  }
+
+  ion-item {
+    --background: #ffffff !important;   /* fondo del item */
+    border-radius: 12px;
+  }
+  
+}
+/* ---------- PERFIL HEADER (LETRAS NEGRAS) ---------- */
+.perfil-header {
+  color: #000 !important; /* color general del texto */
+
+  h2 {
+    color: #000 !important;
+  }
+
+  .perfil-email {
+    color: #333 !important; /* un gris fuerte elegante */
+  }
+}
+

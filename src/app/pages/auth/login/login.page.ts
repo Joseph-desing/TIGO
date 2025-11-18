@@ -45,29 +45,50 @@ export class LoginPage implements OnInit {
 
   /** Login Usuario */
   async loginAsUser() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      await this.showToast('Por favor completa todos los campos correctamente', 'warning');
+      return;
+    }
+
     this.loadingUser = true;
 
     try {
       const { email, password } = this.loginForm.value;
+      console.log('🔐 Intentando login como usuario...');
+
       const user = await this.authService.login({ email, password });
 
-      // guarda rol por si usas guards/UI
+      console.log('✅ Login exitoso:', user);
+
+      // Guardar rol en localStorage
       localStorage.setItem('rol', user.rol);
 
-      // 👇 ajusta 'usuario_registrado' si en tu BD usas otro string
+      // Verificar que sea usuario registrado
       if (user.rol !== 'usuario_registrado') {
         await this.showToast('Tu cuenta no es de usuario. Usa el botón de asesor.', 'warning');
+        await this.authService.logout();
         return;
       }
 
-      await this.showToast(`¡Bienvenido ${user.nombre || 'de nuevo'}!`, 'success');
+      await this.showToast(`¡Bienvenido ${user.nombre || 'Usuario'}!`, 'success');
 
-      // 👉 USUARIO → DASHBOARD USUARIO
-      this.router.navigate(['/pages/dashboard-usuario'], { replaceUrl: true });
+      // Redirigir a dashboard de usuario o tabs
+      this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
 
     } catch (error: any) {
-      await this.showToast('Correo o contraseña incorrectos', 'danger');
+      console.error('❌ Login usuario error:', error);
+      
+      let message = 'Correo o contraseña incorrectos';
+      
+      if (error.message?.includes('Invalid login credentials')) {
+        message = 'Correo o contraseña incorrectos';
+      } else if (error.message?.includes('Email not confirmed')) {
+        message = 'Por favor confirma tu correo electrónico';
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      await this.showToast(message, 'danger');
     } finally {
       this.loadingUser = false;
     }
@@ -75,28 +96,50 @@ export class LoginPage implements OnInit {
 
   /** Login Asesor */
   async loginAsAdvisor() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      await this.showToast('Por favor completa todos los campos correctamente', 'warning');
+      return;
+    }
+
     this.loadingAdvisor = true;
 
     try {
       const { email, password } = this.loginForm.value;
+      console.log('🔐 Intentando login como asesor...');
+
       const user = await this.authService.login({ email, password });
 
+      console.log('✅ Login exitoso:', user);
+
+      // Guardar rol en localStorage
       localStorage.setItem('rol', user.rol);
 
-      // 👇 ajusta 'asesor_comercial' si en tu BD usas otro string
+      // Verificar que sea asesor comercial
       if (user.rol !== 'asesor_comercial') {
         await this.showToast('Tu cuenta no es de asesor. Usa el botón de usuario.', 'warning');
+        await this.authService.logout();
         return;
       }
 
-      await this.showToast(`¡Bienvenido ${user.nombre || 'de nuevo'}!`, 'success');
+      await this.showToast(`¡Bienvenido ${user.nombre || 'Asesor'}!`, 'success');
 
-      // 👉 ASESOR → DASHBOARD ASESOR
+      // Redirigir a dashboard de asesor
       this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
 
     } catch (error: any) {
-      await this.showToast('Correo o contraseña incorrectos', 'danger');
+      console.error('❌ Login asesor error:', error);
+      
+      let message = 'Correo o contraseña incorrectos';
+      
+      if (error.message?.includes('Invalid login credentials')) {
+        message = 'Correo o contraseña incorrectos';
+      } else if (error.message?.includes('Email not confirmed')) {
+        message = 'Por favor confirma tu correo electrónico';
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      await this.showToast(message, 'danger');
     } finally {
       this.loadingAdvisor = false;
     }
@@ -112,28 +155,40 @@ export class LoginPage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Recuperar Contraseña',
       message: 'Ingresa tu correo electrónico para recibir instrucciones',
-      inputs: [{ name: 'email', type: 'email', placeholder: 'Correo electrónico' }],
+      inputs: [
+        {
+          name: 'email',
+          type: 'email',
+          placeholder: 'correo@ejemplo.com'
+        }
+      ],
       buttons: [
-        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
         {
           text: 'Enviar',
           handler: async (data) => {
             if (!data.email) {
-              this.showToast('Ingresa un correo electrónico', 'warning');
+              await this.showToast('Ingresa un correo electrónico', 'warning');
               return false;
             }
+
             try {
               await this.authService.resetPassword(data.email);
-              this.showToast('Revisa tu correo para restablecer tu contraseña', 'success');
+              await this.showToast('Revisa tu correo para restablecer tu contraseña', 'success');
               return true;
-            } catch {
-              this.showToast('Error al enviar el correo', 'danger');
+            } catch (error: any) {
+              console.error('Reset password error:', error);
+              await this.showToast('Error al enviar el correo de recuperación', 'danger');
               return false;
             }
           }
         }
       ]
     });
+
     await alert.present();
   }
 

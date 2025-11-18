@@ -1,18 +1,27 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
 
+    <!-- Inicio -->
     <ion-tab-button tab="tab1" [routerLink]="['/tabs/tab1']">
-      <ion-icon name="home-outline"></ion-icon>
+      <ion-icon name="home"></ion-icon>
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
+    <!-- Mis Planes -->
     <ion-tab-button tab="tab2" [routerLink]="['/tabs/tab2']">
-      <ion-icon name="briefcase-outline"></ion-icon>
+      <ion-icon name="cart"></ion-icon>
       <ion-label>Mis Planes</ion-label>
     </ion-tab-button>
 
+    <!-- Chat -->
+    <ion-tab-button tab="chat" [routerLink]="['/tabs/chat']">
+      <ion-icon name="chatbubble"></ion-icon>
+      <ion-label>Chat</ion-label>
+    </ion-tab-button>
+
+    <!-- Perfil -->
     <ion-tab-button tab="tab3" [routerLink]="['/tabs/tab3']">
-      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-icon name="person"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
 

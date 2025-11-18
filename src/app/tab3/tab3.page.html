@@ -4,27 +4,101 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding perfil-page">
+<ion-content class="perfil-content">
 
-  <div class="profile-top">
-    <div class="avatar">{{ inicial }}</div>
-    <h2>{{ usuario.nombre }}</h2>
-    <p>{{ usuario.email }}</p>
-  </div>
+  <ng-container *ngIf="!cargando; else cargandoTpl">
 
-  <ion-card>
-    <ion-card-content>
-      <p><strong>Email</strong><br>{{ usuario.email }}</p>
-      <p><strong>Teléfono</strong><br>{{ usuario.telefono }}</p>
-    </ion-card-content>
-  </ion-card>
+    <!-- Avatar y nombre -->
+    <div class="perfil-header">
+      <div class="avatar">
+        <span>{{ inicialAvatar }}</span>
+      </div>
 
-  <ion-button expand="block" color="primary">
-    Editar Perfil
-  </ion-button>
+      <div class="perfil-nombre">
+        <h2 *ngIf="perfil.nombre || perfil.apellido; else sinNombreTpl">
+          {{ perfil.nombre }} {{ perfil.apellido }}
+        </h2>
+        <ng-template #sinNombreTpl>
+          <h2>Usuario registrado</h2>
+        </ng-template>
 
-  <ion-button expand="block" color="danger" (click)="logout()">
-    Cerrar Sesión
-  </ion-button>
+        <p class="perfil-email" *ngIf="email">{{ email }}</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta de datos -->
+    <div class="perfil-card">
+
+      <div class="perfil-row">
+        <span class="label">Email</span>
+        <span class="value">{{ email }}</span>
+      </div>
+
+      <div class="perfil-row">
+        <span class="label">Teléfono</span>
+        <span class="value">
+          {{ perfil.telefono || 'No registrado' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- MODO LECTURA -->
+    <div *ngIf="!editando" class="acciones">
+      <ion-button expand="block" shape="round" color="primary" (click)="onEditar()">
+        Editar Perfil
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="danger" (click)="cerrarSesion()">
+        Cerrar Sesión
+      </ion-button>
+    </div>
+
+    <!-- MODO EDICIÓN -->
+    <div *ngIf="editando" class="form-edicion">
+      <ion-item lines="full">
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="perfil.nombre"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Apellido</ion-label>
+        <ion-input [(ngModel)]="perfil.apellido"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input [(ngModel)]="perfil.telefono"></ion-input>
+      </ion-item>
+
+      <div class="acciones">
+        <ion-button
+          expand="block"
+          shape="round"
+          color="primary"
+          (click)="onGuardar()"
+          [disabled]="guardando"
+        >
+          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          shape="round"
+          fill="outline"
+          color="medium"
+          (click)="onCancelar()"
+        >
+          Cancelar
+        </ion-button>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-template #cargandoTpl>
+    <div class="cargando">
+      <ion-spinner></ion-spinner>
+    </div>
+  </ng-template>
 
 </ion-content>

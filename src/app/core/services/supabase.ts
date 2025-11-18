@@ -12,7 +12,16 @@ export class SupabaseService {
     // Inicializar cliente de Supabase
     this.supabase = createClient(
       environment.supabaseUrl,
-      environment.supabaseKey
+      environment.supabaseKey,
+      {
+        auth: {
+          persistSession: true,
+          detectSessionInUrl: false,
+          // 👇 Clave para que NO use Navigator LockManager en Android/WebView
+          // @ts-ignore - la versión de tipos aún no incluye multiTab
+          multiTab: false,
+        }
+      } as any  // truco para que TypeScript no se queje de multiTab
     );
   }
 
@@ -63,7 +72,7 @@ export class SupabaseService {
     const { data } = this.supabase.storage
       .from(bucket)
       .getPublicUrl(path);
-    
+
     return data.publicUrl;
   }
 
@@ -84,7 +93,8 @@ export class SupabaseService {
   subscribeToTable(table: string, callback: (payload: any) => void) {
     return this.supabase
       .channel(`public:${table}`)
-      .on('postgres_changes', 
+      .on(
+        'postgres_changes',
         { event: '*', schema: 'public', table: table },
         callback
       )

@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Solicitudes de Contratación</ion-title>
+
+    <ion-chip slot="start" color="success" class="rol-chip">
+      <ion-label>Asesor Comercial</ion-label>
+    </ion-chip>
+
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="solicitudes-asesor">
+
+  <div class="content-wrapper">
+    <ion-list lines="none">
+      <ion-card *ngFor="let s of solicitudes" class="solicitud-card">
+        <ion-card-content>
+
+          <div class="solicitud-header">
+            <div>
+              <h2>{{ s.cliente }}</h2>
+              <p>{{ s.plan }}</p>
+              <small>{{ s.fecha }}</small>
+            </div>
+
+            <!-- Estado -->
+            <div
+              class="badge-estado"
+              [ngClass]="{
+                'estado-pendiente': s.estado === 'PENDIENTE',
+                'estado-aprobado': s.estado === 'APROBADO',
+                'estado-rechazado': s.estado === 'RECHAZADO'
+              }">
+              {{ s.estado }}
+            </div>
+          </div>
+
+          <div class="acciones">
+            <ion-button
+              size="small"
+              color="success"
+              (click)="aprobarSolicitud(s)">
+              ✓ Aprobar
+            </ion-button>
+
+            <ion-button
+              size="small"
+              color="danger"
+              (click)="rechazarSolicitud(s)">
+              ✗ Rechazar
+            </ion-button>
+
+            <ion-button
+              size="small"
+              color="primary"
+              fill="solid"
+              (click)="abrirChat(s)">
+              •
+            </ion-button>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<!-- Footer tipo tabs (igual que en dashboard-asesor) -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment value="solicitudes" class="asesor-tabs">
+      <ion-segment-button value="planes" (click)="goToPlanes()">
+        <ion-icon name="cube-outline"></ion-icon>
+        <ion-label>Planes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="solicitudes">
+        <ion-icon name="cart-outline"></ion-icon>
+        <ion-label>Solicitudes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="chats" (click)="goToChats()">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <ion-label>Chats</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="perfil" (click)="goToPerfil()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Perfil</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

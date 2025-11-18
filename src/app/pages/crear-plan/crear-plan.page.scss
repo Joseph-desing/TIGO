@@ -1,0 +1,51 @@
+.crear-plan-container {
+  --background: #f4f5f8;
+  padding: 18px;
+}
+
+.form-section {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+ion-item {
+  margin-top: 14px;
+
+  ion-label {
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.imagen-label {
+  margin-top: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.imagen-selector {
+  border: 2px dashed #9e9e9e;
+  border-radius: 12px;
+  height: 140px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #616161;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 44px;
+    margin-bottom: 4px;
+  }
+}
+
+.btn-guardar {
+  margin-top: 20px;
+  font-weight: 600;
+}

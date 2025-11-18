@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Perfil</ion-title>
+
+    <ion-chip slot="start" color="success" class="rol-chip">
+      <ion-label>Asesor Comercial</ion-label>
+    </ion-chip>
+
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-content">
+
+  <div class="perfil-wrapper">
+
+    <!-- Avatar grande -->
+    <div class="perfil-card perfil-header-card">
+      <div class="avatar-grande">
+        {{ inicialNombre }}
+      </div>
+      <h2>{{ user?.nombre }} {{ user?.apellido }} (Asesor)</h2>
+      <p class="email">{{ user?.email }}</p>
+    </div>
+
+    <!-- Datos de contacto -->
+    <div class="perfil-card">
+      <div class="campo">
+        <label>Email</label>
+        <div>{{ user?.email || 'usuario@email.com' }}</div>
+      </div>
+
+      <div class="campo">
+        <label>Teléfono</label>
+        <div>{{ user?.telefono || '+593 99 123 4567' }}</div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <ion-button expand="block" color="primary" (click)="editarPerfil()">
+      Editar Perfil
+    </ion-button>
+
+    <ion-button expand="block" color="danger" (click)="cerrarSesion()">
+      Cerrar Sesión
+    </ion-button>
+
+  </div>
+</ion-content>
+
+<!-- Footer tabs asesor -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment value="perfil" class="asesor-tabs">
+      <ion-segment-button value="planes" (click)="router.navigate(['/pages/dashboard-asesor'])">
+        <ion-icon name="cube-outline"></ion-icon>
+        <ion-label>Planes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="solicitudes" (click)="router.navigate(['/pages/solicitudes-asesor'])">
+        <ion-icon name="cart-outline"></ion-icon>
+        <ion-label>Solicitudes</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="chats" (click)="router.navigate(['/pages/chats-asesor'])">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <ion-label>Chats</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="perfil">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Perfil</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

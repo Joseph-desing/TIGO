@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/pages/dashboard-asesor"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Nuevo Plan</ion-title>
+
+    <ion-chip slot="end" color="success">
+      <ion-label>Asesor Comercial</ion-label>
+    </ion-chip>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="crear-plan-container">
+
+  <form [formGroup]="planForm" (ngSubmit)="guardarPlan()">
+
+    <div class="form-section">
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Nombre del Plan</ion-label>
+        <ion-input formControlName="nombre" placeholder="Ej: Plan Smart 10GB"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Precio Mensual ($)</ion-label>
+        <ion-input type="number" formControlName="precio" placeholder="19.99"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Gigas de Datos</ion-label>
+        <ion-input type="number" formControlName="datos" placeholder="10"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Minutos de Llamadas</ion-label>
+        <ion-input type="number" formControlName="minutos" placeholder="200"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea
+          formControlName="descripcion"
+          placeholder="Describe las características del plan...">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Promoción (Opcional)</ion-label>
+        <ion-input formControlName="promocion" placeholder="Ej: ¡Primer mes gratis!"></ion-input>
+      </ion-item>
+
+      <div class="imagen-label">Imagen del Plan</div>
+
+      <div class="imagen-selector" (click)="subirImagen()">
+        <ion-icon name="image-outline"></ion-icon>
+        <span *ngIf="!imagenFile">Seleccionar Imagen</span>
+        <span *ngIf="imagenFile">{{ imagenFile.name }}</span>
+      </div>
+
+    </div>
+
+    <ion-button
+      expand="block"
+      color="primary"
+      class="btn-guardar"
+      type="submit"
+      [disabled]="planForm.invalid || loading">
+      {{ loading ? 'Guardando...' : 'Guardar Plan' }}
+    </ion-button>
+
+  </form>
+
+</ion-content>

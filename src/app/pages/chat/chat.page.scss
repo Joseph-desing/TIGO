@@ -1,0 +1,149 @@
+.chat-header {
+  --background: #0054e9;
+  color: #fff;
+
+  ion-toolbar {
+    --background: transparent;
+    padding-inline: 12px;
+    padding-top: 8px;
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .badge-rol {
+    background: #0042b8;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .header-title {
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}
+
+.chat-content {
+  --background: #f5f7fb;
+
+  .messages-container {
+    padding: 16px 12px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .message-row {
+    display: flex;
+    width: 100%;
+  }
+
+  .message-bubble {
+    max-width: 80%;
+    padding: 10px 12px;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .message-text {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .message-time {
+    align-self: flex-end;
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  /* Mensajes del asesor (izquierda, blancos) */
+  .from-asesor {
+    justify-content: flex-start;
+
+    .message-bubble {
+      background: #ffffff;
+      color: #202020;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-text {
+      color: #202020;
+    }
+
+    .message-time {
+      color: #444;
+    }
+  }
+
+  /* Mensajes del usuario (derecha, azules con letras negras) */
+  .from-user {
+    justify-content: flex-end;
+
+    .message-bubble {
+      background: #e1ecff;      /* azul muy clarito */
+      color: #000000;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-text {
+      color: #000000;           /* TEXTO NEGRO */
+    }
+
+    .message-time {
+      color: #333333;           /* hora oscura */
+    }
+  }
+}
+
+.chat-footer {
+  ion-toolbar {
+    --background: #ffffff;
+    padding-inline: 8px;
+  }
+
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  ion-input {
+  --background: #f1f3f8;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  border-radius: 999px;
+  font-size: 14px;
+
+  /* 👇 TEXTO NEGRO */
+  color: #000 !important;
+
+  /* 👇 PLACEHOLDER NEGRO */
+  --placeholder-color: #666 !important;
+
+  /* 👇 Cursor verde → Puedes ponerlo negro si quieres */
+  --caret-color: #000;
+
+  /* Quitar el borde verde raro */
+  --highlight-height: 0px !important;
+}
+
+
+  ion-button {
+    min-width: 40px;
+    height: 40px;
+  }
+}

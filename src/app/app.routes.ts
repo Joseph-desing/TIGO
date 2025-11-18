@@ -25,26 +25,26 @@ export const routes: Routes = [
       import('./pages/auth/register/register.page').then(m => m.RegisterPage)
   },
 
-  // Tabs
+  // Tabs principales de usuario
   {
     path: 'tabs',
     loadChildren: () =>
       import('./tabs/tabs.routes').then(m => m.routes),
   },
 
-  // Detalle de plan
+  // Detalle de plan (para usuarios)
   {
     path: 'pages/detalle-plan/:id',
     loadComponent: () =>
       import('./pages/detalle-plan/detalle-plan.page').then(m => m.DetallePlanPage)
   },
 
-  // Chat (requiere login)
+  // Chat (puedes poner guard si quieres que solo usuarios logueados entren)
   {
-    path: 'pages/chat/:contratacionId',
+    path: 'chat',
     loadComponent: () =>
       import('./pages/chat/chat.page').then(m => m.ChatPage),
-    canActivate: [authGuard]
+    // canActivate: [authGuard],
   },
 
   // Dashboard ASESOR
@@ -54,20 +54,55 @@ export const routes: Routes = [
       import('./pages/dashboard-asesor/dashboard-asesor.page')
         .then(m => m.DashboardAsesorPage),
     canActivate: [authGuard, roleGuard],
-    data: { role: 'asesor_comercial' }
+    data: { roles: ['asesor_comercial'] }   
   },
 
-  // Dashboard USUARIO
+  // Página para CREAR NUEVO PLAN (asesor)
+  {
+    path: 'pages/crear-plan',
+    loadComponent: () =>
+      import('./pages/crear-plan/crear-plan.page')
+        .then(m => m.CrearPlanPage),
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['asesor_comercial'] }  
+  },
+  {
+  path: 'pages/solicitudes-asesor',
+  loadComponent: () =>
+    import('./pages/solicitudes-asesor/solicitudes-asesor.page')
+      .then(m => m.SolicitudesAsesorPage),
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['asesor_comercial'] }
+},
+{
+  path: 'pages/chats-asesor',
+  loadComponent: () =>
+    import('./pages/chats-asesor/chats-asesor.page')
+      .then(m => m.ChatsAsesorPage),
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['asesor_comercial'] }
+},
+
+{
+  path: 'pages/perfil-asesor',
+  loadComponent: () =>
+    import('./pages/perfil-asesor/perfil-asesor.page')
+      .then(m => m.PerfilAsesorPage),
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['asesor_comercial'] }
+},
+
+  // Dashboard USUARIO REGISTRADO
   {
     path: 'pages/dashboard-usuario',
     loadComponent: () =>
       import('./pages/dashboard-usuario/dashboard-usuario.page')
         .then(m => m.DashboardUsuarioPage),
     canActivate: [authGuard, roleGuard],
-    data: { role: 'usuario_registrado' }
+    data: { roles: ['usuario_registrado'] } // ✅ unificado
   },
 
-  // 🔵 Dashboard INVITADO (SIN guards)
+  // Dashboard INVITADO (SIN guards)
   {
     path: 'pages/dashboard-invitado',
     loadComponent: () =>

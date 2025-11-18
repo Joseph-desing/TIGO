@@ -2,6 +2,7 @@
   --background: #f5f7fb;
 }
 
+/* Banner */
 .banner-sesion {
   background: #e7f0ff;
   border-radius: 14px;
@@ -26,6 +27,7 @@
   }
 }
 
+/* Hero */
 .hero-card {
   background: linear-gradient(135deg, #0052d9, #338fff);
   border-radius: 18px;
@@ -38,7 +40,6 @@
     font-size: 1.3rem;
     font-weight: 700;
   }
-
   p {
     margin: 0;
     font-size: 0.9rem;
@@ -46,100 +47,87 @@
   }
 }
 
+/* Search */
 .search-bar {
-  --background: #ffffff;
+  --background: #fff;
   --border-radius: 999px;
   margin-bottom: 12px;
 }
 
-.planes-header {
+/* Header */
+.planes-header h3 {
   margin: 4px 0 8px;
-  h3 {
-    margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Tarjetas de planes */
+.planes-list ion-card.plan-card {
+  border-radius: 18px;
+  padding: 2px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+  ion-card-header {
+    padding-bottom: 4px;
+  }
+
+  ion-card-title {
     font-size: 1rem;
+    color: #fff;
+  }
+
+  .precio .monto {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    text-align: right;
+  }
+
+  ion-card-content {
+    background: #fff;
+    border-radius: 14px;
+    margin-top: 8px;
+    padding-top: 10px;
+  }
+
+  .etiqueta {
+    font-size: 0.8rem;
+    color: #ff9900;
     font-weight: 600;
-    color: #333;
+    margin-bottom: 4px;
   }
-}
 
-.planes-list {
-  ion-card.plan-card {
-    border-radius: 18px;
-    padding: 2px;
-    margin-bottom: 14px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  .descripcion {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
 
-    ion-card-header {
-      padding-bottom: 4px;
-    }
+  .detalles {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
 
-    ion-card-title {
-      font-size: 1rem;
-      color: #ffffff;
-    }
-
-    .precio {
-      text-align: right;
-      .monto {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #ffffff;
-      }
-    }
-
-    ion-card-content {
-      background: #ffffff;
-      border-radius: 14px;
-      margin-top: 8px;
-      padding-top: 10px;
-    }
-
-    .etiqueta {
-      font-size: 0.8rem;
-      color: #ff9900;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .descripcion {
-      font-size: 0.85rem;
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .detalles {
+    .detalle-item {
       display: flex;
-      gap: 12px;
-      margin-bottom: 10px;
-
-      .detalle-item {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.8rem;
-        color: #444;
-      }
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: #444;
     }
+  }
 
-    ion-button {
-      --border-radius: 999px;
-      --background: #0052d9;
-      --color: #ffffff;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
+  ion-button {
+    --border-radius: 999px;
+    --background: #0052d9;
+    --color: #fff;
+    font-size: 0.85rem;
   }
 }
 
-/* Gradientes para las tarjetas */
-.gradient-1 {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-}
-
-.gradient-2 {
-  background: linear-gradient(135deg, #ff5f6d, #ffc371);
-}
-
-.gradient-3 {
-  background: linear-gradient(135deg, #36d1dc, #5b86e5);
-}
+/* Gradientes */
+.gradient-1 { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+.gradient-2 { background: linear-gradient(135deg, #ff5f6d, #ffc371); }
+.gradient-3 { background: linear-gradient(135deg, #36d1dc, #5b86e5); }

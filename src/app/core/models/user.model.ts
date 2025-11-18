@@ -1,13 +1,14 @@
 export type UserRole = 'usuario_registrado' | 'asesor_comercial';
 
 export interface UserProfile {
-  id: string; // UUID de Supabase Auth
+  id: string;
   email: string;
   nombre?: string;
   apellido?: string;
   telefono?: string;
   rol: UserRole;
   avatar_url?: string;
+  estado?: string; // 👈 AGREGAR ESTA LÍNEA
   created_at?: string;
   updated_at?: string;
 }
@@ -18,6 +19,7 @@ export interface RegisterData {
   nombre?: string;
   apellido?: string;
   telefono?: string;
+  rol?: UserRole;
 }
 
 export interface LoginData {

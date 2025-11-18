@@ -7,24 +7,33 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const requiredRole = route.data['role'] as UserRole;
+  // Ahora usamos "roles" como arreglo en las rutas
+  const requiredRoles = route.data['roles'] as UserRole[] | undefined;
   const user = authService.getCurrentUser();
 
+  // Si no hay usuario, lo mandamos a login
   if (!user) {
     router.navigate(['/pages/auth/login']);
     return false;
   }
 
-  if (requiredRole && user.rol !== requiredRole) {
-    // Si es asesor intentando acceder a ruta de usuario, redirigir a dashboard
+  // Si la ruta no define roles, se deja pasar
+  if (!requiredRoles || requiredRoles.length === 0) {
+    return true;
+  }
+
+  // Si el rol del usuario NO está en los roles permitidos:
+  if (!requiredRoles.includes(user.rol as UserRole)) {
+    // Si es asesor y trata de entrar a algo de usuarios
     if (user.rol === 'asesor_comercial') {
       router.navigate(['/pages/dashboard-asesor']);
     } else {
-      // Si es usuario intentando acceder a ruta de asesor, redirigir a tabs
+      // Si es usuario normal e intenta entrar a rutas de asesor
       router.navigate(['/tabs/tab1']);
     }
     return false;
   }
 
+  // Tiene rol correcto → puede pasar
   return true;
 };

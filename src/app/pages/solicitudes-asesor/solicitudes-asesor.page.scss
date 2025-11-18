@@ -1,0 +1,81 @@
+.solicitudes-asesor {
+  --background: #f4f5f8;
+}
+
+.content-wrapper {
+  padding: 12px 12px 80px;
+}
+
+.solicitud-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
+}
+
+.solicitud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  h2 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 2px 0;
+    font-size: 0.85rem;
+    color: #616161;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: #9e9e9e;
+  }
+}
+
+.badge-estado {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.estado-pendiente {
+  background-color: #fff3cd;
+  color: #f57f17;
+}
+
+.estado-aprobado {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.estado-rechazado {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.acciones {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.asesor-tabs {
+  ion-segment-button {
+    --indicator-color: transparent;
+    --color-checked: #3f51b5;
+  }
+
+  ion-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  ion-label {
+    font-size: 0.7rem;
+  }
+}

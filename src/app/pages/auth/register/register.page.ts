@@ -39,6 +39,8 @@ export class RegisterPage implements OnInit {
       apellido: [''],
       email: ['', [Validators.required, Validators.email]],
       telefono: [''],
+      // 👇 NUEVO: control para el rol
+      rol: ['usuario_registrado', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       aceptaTerminos: [false, Validators.requiredTrue]
@@ -84,6 +86,7 @@ export class RegisterPage implements OnInit {
     this.loading = true;
 
     try {
+      // Sacamos confirmPassword y aceptaTerminos, PERO DEJAMOS rol
       const { confirmPassword, aceptaTerminos, ...registerData } = this.registerForm.value;
 
       const user = await this.authService.register(registerData);
@@ -91,7 +94,13 @@ export class RegisterPage implements OnInit {
       // Mostrar mensaje de éxito
       await this.showToast('¡Cuenta creada exitosamente!', 'success');
 
-      // Redirigir a tabs (usuario registrado)
+      // 👉 Aquí podrías redirigir distinto según rol si quieres:
+      // if (registerData.rol === 'asesor_comercial') {
+      //   this.router.navigate(['/pages/dashboard-asesor'], { replaceUrl: true });
+      // } else {
+      //   this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
+      // }
+
       this.router.navigate(['/tabs/tab1'], { replaceUrl: true });
 
     } catch (error: any) {
@@ -99,11 +108,11 @@ export class RegisterPage implements OnInit {
       
       let message = 'Error al crear la cuenta';
       
-      if (error.message.includes('already registered')) {
+      if (error.message?.includes('already registered')) {
         message = 'Este correo ya está registrado';
-      } else if (error.message.includes('Invalid email')) {
+      } else if (error.message?.includes('Invalid email')) {
         message = 'Correo electrónico inválido';
-      } else if (error.message.includes('Password')) {
+      } else if (error.message?.includes('Password')) {
         message = 'La contraseña debe tener al menos 6 caracteres';
       }
 
@@ -113,9 +122,6 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  /**
-   * Mostrar términos y condiciones
-   */
   async showTerminos(event: Event) {
     event.preventDefault();
     
@@ -139,9 +145,6 @@ export class RegisterPage implements OnInit {
     await alert.present();
   }
 
-  /**
-   * Mostrar política de privacidad
-   */
   async showPrivacidad(event: Event) {
     event.preventDefault();
     
@@ -165,9 +168,6 @@ export class RegisterPage implements OnInit {
     await alert.present();
   }
 
-  /**
-   * Mostrar toast
-   */
   async showToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,

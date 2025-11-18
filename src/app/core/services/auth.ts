@@ -18,9 +18,6 @@ export class AuthService {
     this.checkSession();
   }
 
-  /**
-   * Verificar si hay una sesión activa al iniciar
-   */
   private async checkSession() {
     try {
       const session = await this.supabaseService.getSession();
@@ -33,45 +30,105 @@ export class AuthService {
   }
 
   /**
-   * Registrar nuevo usuario
+   * REGISTRO SIN TRIGGER - Crear perfil manualmente con service_role
    */
   async register(data: RegisterData): Promise<UserProfile> {
     const supabase = this.supabaseService.getClient();
 
-    // 1. Crear usuario en Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      console.log('📝 Registrando usuario con email:', data.email);
 
-    if (authError) throw authError;
-    if (!authData.user) throw new Error('Error al crear usuario');
+      // 1. Crear usuario en Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            nombre: data.nombre || '',
+            apellido: data.apellido || '',
+            telefono: data.telefono || '',
+            rol: data.rol || 'usuario_registrado'
+          }
+        }
+      });
 
-    // 2. Crear perfil en tabla perfiles
-    const userProfile: Partial<UserProfile> = {
-      id: authData.user.id,
-      email: data.email,
-      nombre: data.nombre,
-      apellido: data.apellido,
-      telefono: data.telefono,
-      rol: 'usuario_registrado', // Rol por defecto
-    };
+      if (authError) {
+        console.error('❌ Error en signUp:', authError);
+        throw authError;
+      }
 
-    const { data: profileData, error: profileError } = await supabase
-      .from('perfiles')
-      .insert(userProfile)
-      .select()
-      .single();
+      if (!authData.user) {
+        throw new Error('No se pudo crear el usuario');
+      }
 
-    if (profileError) throw profileError;
+      console.log('✅ Usuario creado en Auth:', authData.user.id);
 
-    this.currentUserSubject.next(profileData);
-    return profileData;
+      // 2. Esperar para asegurar que el usuario existe
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // 3. Verificar si ya existe un perfil (por si el trigger funcionó)
+      const { data: existingProfile } = await supabase
+        .from('perfiles')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (existingProfile) {
+        console.log('✅ Perfil ya existía');
+        this.currentUserSubject.next(existingProfile);
+        return existingProfile;
+      }
+
+      // 4. Si no existe, crear perfil manualmente
+      console.log('📝 Creando perfil manualmente...');
+      
+      const profileToInsert = {
+        id: authData.user.id,
+        email: data.email,
+        nombre: data.nombre || '',
+        apellido: data.apellido || '',
+        telefono: data.telefono || '',
+        rol: (data.rol || 'usuario_registrado') as UserRole
+      };
+
+      const { data: profileData, error: profileError } = await supabase
+        .from('perfiles')
+        .insert(profileToInsert)
+        .select()
+        .single();
+
+      if (profileError) {
+        console.error('❌ Error al crear perfil:', profileError);
+        
+        // Intentar cargar el perfil por si ya existe
+        try {
+          const profile = await this.loadUserProfile(authData.user.id);
+          return profile;
+        } catch {
+          throw new Error('Error al crear perfil. Intenta iniciar sesión.');
+        }
+      }
+
+      console.log('✅ Perfil creado exitosamente');
+      this.currentUserSubject.next(profileData);
+      return profileData;
+
+    } catch (error: any) {
+      console.error('❌ Error en registro:', error);
+
+      if (error.message?.includes('User already registered') || 
+          error.message?.includes('already registered')) {
+        throw new Error('Este correo ya está registrado');
+      }
+
+      if (error.code === '23505') {
+        throw new Error('Este correo ya está registrado');
+      }
+
+      throw error;
+    }
   }
 
-  /**
-   * Iniciar sesión
-   */
   async login(credentials: LoginData): Promise<UserProfile> {
     const supabase = this.supabaseService.getClient();
 
@@ -83,14 +140,10 @@ export class AuthService {
     if (error) throw error;
     if (!data.user) throw new Error('Error al iniciar sesión');
 
-    // Cargar perfil del usuario
     const profile = await this.loadUserProfile(data.user.id);
     return profile;
   }
 
-  /**
-   * Cargar perfil de usuario desde la BD
-   */
   private async loadUserProfile(userId: string): Promise<UserProfile> {
     const supabase = this.supabaseService.getClient();
 
@@ -100,15 +153,15 @@ export class AuthService {
       .eq('id', userId)
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error al cargar perfil:', error);
+      throw error;
+    }
 
     this.currentUserSubject.next(data);
     return data;
   }
 
-  /**
-   * Cerrar sesión
-   */
   async logout() {
     const supabase = this.supabaseService.getClient();
     const { error } = await supabase.auth.signOut();
@@ -119,45 +172,27 @@ export class AuthService {
     this.router.navigate(['/pages/auth/login']);
   }
 
-  /**
-   * Obtener usuario actual
-   */
   getCurrentUser(): UserProfile | null {
     return this.currentUserSubject.value;
   }
 
-  /**
-   * Verificar si el usuario está autenticado
-   */
   isAuthenticated(): boolean {
     return this.currentUserSubject.value !== null;
   }
 
-  /**
-   * Verificar si el usuario tiene un rol específico
-   */
   hasRole(role: UserRole): boolean {
     const user = this.currentUserSubject.value;
     return user?.rol === role;
   }
 
-  /**
-   * Verificar si es asesor
-   */
   isAsesor(): boolean {
     return this.hasRole('asesor_comercial');
   }
 
-  /**
-   * Verificar si es usuario registrado
-   */
   isUsuarioRegistrado(): boolean {
     return this.hasRole('usuario_registrado');
   }
 
-  /**
-   * Actualizar perfil de usuario
-   */
   async updateProfile(updates: Partial<UserProfile>): Promise<UserProfile> {
     const user = this.getCurrentUser();
     if (!user) throw new Error('No hay usuario autenticado');
@@ -177,9 +212,6 @@ export class AuthService {
     return data;
   }
 
-  /**
-   * Cambiar contraseña
-   */
   async changePassword(newPassword: string) {
     const supabase = this.supabaseService.getClient();
 
@@ -190,9 +222,6 @@ export class AuthService {
     if (error) throw error;
   }
 
-  /**
-   * Recuperar contraseña (enviar email)
-   */
   async resetPassword(email: string) {
     const supabase = this.supabaseService.getClient();
 
