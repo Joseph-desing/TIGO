@@ -1,43 +1,147 @@
 .login-container {
-  --background: #ffffff;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
 
-.logo {
+.welcome-section {
   text-align: center;
-  margin-top: 40px;
+  margin: 40px 0 60px 0;
 
-  img {
-    width: 160px;
+  .app-icon {
+    font-size: 80px;
+    color: var(--tigo-blue);
+    margin-bottom: 20px;
   }
-}
 
-.titulo {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  color: #002F6C;
-  margin-top: 20px;
+  h1 {
+    color: var(--tigo-blue);
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.95rem;
+    margin: 0;
+  }
 }
 
 .input-item {
-  border-radius: 14px;
-  margin-top: 20px;
-  --background: #f1f3f8;
-}
+  --background: #f8f9fa;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
 
-ion-button {
-  margin-top: 30px;
-  --background: #002F6C;
-}
-
-.registro-link {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 14px;
-
-  span {
-    color: #00AEEF;
-    font-weight: 600;
-    margin-left: 6px;
+  &.item-has-focus {
+    --background: white;
+    border-color: var(--tigo-sky);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
   }
+
+  ion-icon {
+    color: var(--tigo-blue);
+    font-size: 20px;
+    margin-right: 12px;
+  }
+
+  ion-input {
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 16px;
+  }
+}
+
+.error-message {
+  margin: -12px 0 16px 16px;
+  
+  small {
+    font-size: 0.85rem;
+  }
+}
+
+.forgot-password {
+  text-align: right;
+  margin: -8px 0 20px 0;
+
+  ion-button {
+    --color: var(--tigo-sky);
+    font-size: 0.9rem;
+    text-transform: none;
+  }
+}
+
+.login-button {
+  --background: var(--tigo-gradient);
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 20px 0 12px 0;
+  text-transform: none;
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+}
+
+ion-button[fill="outline"] {
+  --border-color: var(--tigo-blue);
+  --color: var(--tigo-blue);
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.guest-access {
+  text-align: center;
+  margin: 30px 0 20px 0;
+
+  ion-button {
+    text-transform: none;
+    font-size: 0.95rem;
+  }
+}
+
+.demo-info {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 30px;
+  text-align: center;
+  border-left: 4px solid var(--tigo-sky);
+
+  small {
+    line-height: 1.6;
+  }
+}
+
+// Animación de entrada
+.login-container {
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Texto negro al escribir */
+ion-input {
+  --color: #000 !important;
+  --placeholder-color: #888;
+}
+
+ion-input input {
+  color: #000 !important;
 }

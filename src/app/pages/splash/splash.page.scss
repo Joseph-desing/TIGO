@@ -1,0 +1,49 @@
+.splash-container {
+  --background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header {
+  text-align: center;
+  margin-top: 40px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #002F6C;
+  }
+
+  p {
+    margin-top: 6px;
+    font-size: 16px;
+    color: #4e4e4e;
+  }
+}
+
+.botones {
+  margin-top: 40px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.btn-invitado {
+  --background: #0053D9;
+  --color: white;
+  font-weight: 600;
+}
+
+.btn-login {
+  --border-color: #0053D9;
+  --color: #0053D9;
+  font-weight: 600;
+}
+
+.btn-register {
+  --background: #dcdcdc;
+  --color: #454545;
+  font-weight: 600;
+}

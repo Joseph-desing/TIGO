@@ -1,36 +1,85 @@
-<ion-content class="ion-padding login-container">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Iniciar Sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="logo">
-    <img src="assets/logo.png" alt="Tigo Conecta">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="login-container">
+    <div class="welcome-section">
+      <ion-icon name="phone-portrait-outline" class="app-icon"></ion-icon>
+      <h1>Bienvenido a TIGO</h1>
+      <p>Ingresa tus credenciales para continuar</p>
+    </div>
+
+    <form [formGroup]="loginForm">
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="label">Correo electrónico</label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <ion-text color="danger">
+            <small *ngIf="loginForm.get('email')?.errors?.['required']">El correo es requerido</small>
+            <small *ngIf="loginForm.get('email')?.errors?.['email']">Ingresa un correo válido</small>
+          </ion-text>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="label">Contraseña</label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password"></ion-input>
+          <ion-button fill="clear" slot="end" (click)="togglePassword()">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <ion-text color="danger">
+            <small *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es requerida</small>
+            <small *ngIf="loginForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</small>
+          </ion-text>
+        </div>
+      </div>
+
+      <!-- Olvidé contraseña -->
+      <div class="forgot-password">
+        <ion-button fill="clear" size="small" (click)="onForgotPassword()">
+          ¿Olvidaste tu contraseña?
+        </ion-button>
+      </div>
+
+      <!-- Botón Login Usuario -->
+      <ion-button expand="block" type="button" [disabled]="loginForm.invalid || loadingUser" (click)="loginAsUser()">
+        <ion-spinner name="crescent" *ngIf="loadingUser"></ion-spinner>
+        <span *ngIf="!loadingUser">Iniciar Sesión como Usuario</span>
+      </ion-button>
+
+      <!-- Botón Login Asesor -->
+      <ion-button expand="block" type="button" [disabled]="loginForm.invalid || loadingAdvisor" (click)="loginAsAdvisor()">
+        <ion-spinner name="crescent" *ngIf="loadingAdvisor"></ion-spinner>
+        <span *ngIf="!loadingAdvisor">Iniciar Sesión como Asesor</span>
+      </ion-button>
+
+      <!-- Crear cuenta -->
+      <ion-button expand="block" fill="outline" (click)="goToRegister()" [disabled]="loadingUser || loadingAdvisor">
+        Crear Cuenta Nueva
+      </ion-button>
+
+   
+
+    </form>
+
+    <!-- Demo credentials -->
+    <div class="demo-info" *ngIf="!production">
+      <ion-text color="medium">
+        <small></small>
+      </ion-text>
+    </div>
   </div>
-
-  <h1 class="titulo">Iniciar Sesión</h1>
-
-  <ion-item class="input-item">
-    <ion-icon name="mail" slot="start"></ion-icon>
-    <ion-input 
-      type="email" 
-      [(ngModel)]="email"
-      placeholder="Correo electrónico">
-    </ion-input>
-  </ion-item>
-
-  <ion-item class="input-item">
-    <ion-icon name="lock-closed" slot="start"></ion-icon>
-    <ion-input 
-      type="password"
-      [(ngModel)]="password"
-      placeholder="Contraseña">
-    </ion-input>
-  </ion-item>
-
-  <ion-button expand="block" shape="round" (click)="iniciarSesion()">
-    Entrar
-  </ion-button>
-
-  <div class="registro-link">
-    ¿No tienes cuenta?
-    <span (click)="router.navigate(['/register'])">Regístrate aquí</span>
-  </div>
-
 </ion-content>
